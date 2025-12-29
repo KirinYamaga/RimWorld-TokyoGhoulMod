@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+	<XenotypeDef>
+		<defName>TG_Ghoul</defName>
+		<label>Гуль</label>
+		<description>Сверхчеловек-хищник.</description>
+		<iconPath>UI/Icons/Xenotypes/Sanguophage</iconPath>
+		<genes>
+			<li>Gene_RCCells</li>
+			
+			<li>TotalHealing</li> 
+			<li>Superclotting</li> 
+			<li>PerfectImmunity</li> 
+			<li>Robust</li> 
+			<li>WoundHealing_SuperFast</li> 
+			<li>MoveSpeed_Quick</li> 
+			<li>LongJumpLegs</li> 
+			<li>DarkVision</li> 
+		</genes>
+	</XenotypeDef>
+</Defs>

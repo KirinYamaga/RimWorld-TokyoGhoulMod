@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <ThingDef ParentName="BodyPartBase">
+    <defName>Kakuho_Item</defName>
+    <label>какухо (ринкаку)</label>
+    <description>Извлечённое какухо в контейнере.</description>
+    <graphicData>
+      <texPath>Things/Item/Health/HealthItem</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <statBases>
+      <MarketValue>800</MarketValue>
+      <Mass>2</Mass>
+    </statBases>
+    <techLevel>Industrial</techLevel>
+    <thingCategories>
+      <li>BodyPartsBionic</li>
+    </thingCategories>
+  </ThingDef>
+
+  <HediffDef ParentName="ImplantHediffBase">
+    <defName>KakuhoRinkakuHediff</defName>
+    <label>какухо (ринкаку)</label>
+    <description>Вживленный орган-какухо. Он накапливает RC-клетки и преобразует их в боевую форму при активации.</description>
+    <hediffClass>HediffWithComps</hediffClass> <defaultLabelColor>(0.9, 0.4, 0.4)</defaultLabelColor>
+    <isBad>false</isBad>
+    <stages>
+      <li>
+        <minSeverity>0.1</minSeverity>
+        <label>стадия 1</label>
+        <capMods>
+          <li>
+            <capacity>Consciousness</capacity>
+            <offset>0.05</offset>
+          </li>
+        </capMods>
+      </li>
+      <li>
+        <minSeverity>2.0</minSeverity>
+        <label>стадия 2</label>
+        <statOffsets>
+          <MeleeDamageFactor>0.15</MeleeDamageFactor>
+        </statOffsets>
+      </li>
+    </stages>
+  </HediffDef>
+
+  <RecipeDef ParentName="SurgeryInstallImplantBase">
+    <defName>InstallKakuhoRinkaku</defName>
+    <label>вживить какухо ринкаку</label>
+    <description>Хирургическое вживление какухо в ткани позвоночника.</description>
+    <workerClass>Recipe_InstallImplant</workerClass> <jobString>Вживляет какухо.</jobString>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>KakuhoRinkakuItem</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>KakuhoRinkakuItem</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <appliedOnFixedBodyParts>
+      <li>Spine</li>
+    </appliedOnFixedBodyParts>
+    <addsHediff>KakuhoRinkakuHediff</addsHediff>
+  </RecipeDef>
+
+</Defs>

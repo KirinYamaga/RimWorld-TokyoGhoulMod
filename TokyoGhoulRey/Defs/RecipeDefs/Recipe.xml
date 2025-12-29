@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<Defs>
+  <RecipeDef ParentName="SurgeryInstallImplantBase">
+    <defName>InstallKakuho</defName>
+    <label>вживить какухо</label>
+    <jobString>Вживляет какухо.</jobString>
+    <addsHediff>Kakuho</addsHediff>
+    <appliedOnFixedBodyParts>
+      <li>Spine</li>
+    </appliedOnFixedBodyParts>
+    <ingredients>
+      <li>
+        <filter><thingDefs><li>Kakuho_Item</li></thingDefs></filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs><li>Kakuho_Item</li></thingDefs>
+    </fixedIngredientFilter>
+  </RecipeDef>
+
+  <RecipeDef ParentName="SurgeryRemoveImplantBase">
+    <defName>RemoveKakuho</defName>
+    <label>извлечь какухо</label>
+    <description>Извлечь какухо.</description>
+    <workerClass>Recipe_RemoveHediff</workerClass>
+    <removesHediff>Kakuho</removesHediff>
+    <successfullyRemovedHediffItem>Kakuho_Item</successfullyRemovedHediffItem>
+    <jobString>Извлекает какухо.</jobString>
+  </RecipeDef>
+</Defs>

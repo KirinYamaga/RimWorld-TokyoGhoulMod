@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <GeneResourceDef>
+    <defName>RCCells</defName>
+    <label>RC-клетки</label>
+    <resourceLabel>RC</resourceLabel>
+    <showInHealthTab>true</showInHealthTab>
+  </GeneResourceDef>
+
+  <GeneDef>
+    <defName>Gene_RCCells</defName>
+    <label>Биология гуля</label>
+    <description>Особая биология гуля. В состоянии покоя метаболизм замедлен настолько, что позволяет обходиться без пищи до 15 дней. Однако активация кагуне требует колоссальных затрат энергии.</description>
+    <geneClass>TokyoGhoulMod.Gene_RCCells</geneClass>
+    <resourceDef>RCCells</resourceDef> 
+    
+    <resourceGizmoType>TokyoGhoulMod.GeneGizmo_RCCells</resourceGizmoType>
+    <resourceGizmoThresholds>
+      <li>0.2</li>
+      <li>0.5</li>
+      <li>0.8</li>
+    </resourceGizmoThresholds>
+
+    <renderNodeProperties>
+      <li>
+        <nodeClass>TokyoGhoulMod.PawnRenderNode_Kagune</nodeClass>
+        <workerClass>TokyoGhoulMod.PawnRenderNodeWorker_Kagune</workerClass>
+        <texPath>Things/Pawn/Kagune/Rinkaku</texPath>
+        <parentTagDef>Body</parentTagDef>
+        <drawData>
+          <defaultData>
+            <layer>-2</layer>
+            <scale>1.5</scale>
+          </defaultData>
+          <dataNorth>
+            <layer>80</layer>
+          </dataNorth>
+        </drawData>
+      </li>
+    </renderNodeProperties>
+
+    <abilities>
+      <li>ReleaseKaguneRinkaku</li>
+    </abilities>
+
+    <biostatMet>-3</biostatMet> 
+    <biostatCpx>2</biostatCpx>
+    <displayOrderInCategory>100</displayOrderInCategory>
+    <showGuidance>true</showGuidance>
+    
+    <customEffectDescriptions>
+      <li>Постепенно расходует запас RC-клеток при использовании способностей.</li>
+    </customEffectDescriptions>
+  </GeneDef>
+
+</Defs>
