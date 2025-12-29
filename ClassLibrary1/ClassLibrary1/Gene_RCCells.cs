@@ -11,7 +11,10 @@ namespace TokyoGhoulMod
     {
         private const float DaysToStarve = 15f;
         private const float PassiveDrainPerDay = 1f / DaysToStarve;
+
+        // Баланс расхода: Укаку потребляет в 25 раз больше нормы, остальные в 15 раз
         private const float KaguneDrainMultiplier = 15f;
+        private const float UkakuDrainMultiplier = 25f;
 
         public override float InitialResourceMax => 1f;
         protected override Color BarColor => new Color(0.75f, 0f, 0f);
@@ -19,22 +22,18 @@ namespace TokyoGhoulMod
         public override float MinLevelForAlert => 0.15f;
         public override string ResourceLabel => "RC-клетки";
 
-        // Пороги для отображения на шкале (заменяет отсутствующий resourceGizmoThresholds)
         private static readonly List<float> Thresholds = new List<float> { 0.2f, 0.5f, 0.8f };
 
         public override IEnumerable<Gizmo> GetGizmos()
         {
-            // Сначала возвращаем базовые гизмо, пропуская стандартную шкалу ресурса
             foreach (Gizmo gizmo in base.GetGizmos())
             {
                 if (!(gizmo is GeneGizmo_Resource)) yield return gizmo;
             }
 
-            // Добавляем нашу кастомную шкалу
             if (pawn.IsColonistPlayerControlled)
             {
-                // Аргументы: (сам ген, список потребителей ресурса, основной цвет, цвет подсветки)
-                // Мы передаем null в качестве списка потребителей, так как RC-клетки тратит код, а не другие гены.
+                // Используем конструктор, который мы поправили в GeneGizmo_RCCells
                 yield return new GeneGizmo_RCCells(this, null, BarColor, BarHighlightColor);
             }
         }
@@ -43,40 +42,81 @@ namespace TokyoGhoulMod
         {
             base.Tick();
 
-            // Расчет кагуне и глаз делаем раз в 100 тиков для оптимизации
             if (pawn.IsHashIntervalTick(100))
             {
-                bool isActive = pawn.health.hediffSet.HasHediff(DefDatabase<HediffDef>.GetNamed("KaguneRinkaku", false));
-                ManageKakugan(isActive);
+                // Проверяем типы кагуне
+                bool isUkakuActive = pawn.health.hediffSet.HasHediff(HediffDef.Named("Hediff_Ukaku"));
+                bool isAnyActive = IsKaguneActive();
 
-                float dailyDrain = isActive ? (PassiveDrainPerDay * KaguneDrainMultiplier) : PassiveDrainPerDay;
-                Value -= (dailyDrain / 60000f) * 100f;
+                ManageKakugan(isAnyActive);
+
+                // Расчет множителя расхода RC-клеток
+                float currentMultiplier = PassiveDrainPerDay;
+                if (isAnyActive)
+                {
+                    // Укаку сжигает клетки значительно быстрее (стеклянная пушка)
+                    currentMultiplier *= isUkakuActive ? UkakuDrainMultiplier : KaguneDrainMultiplier;
+                }
+
+                Value -= (currentMultiplier / 60000f) * 100f;
+
+                UpdateStatusEffects(isAnyActive);
             }
 
-            // ЛОГИКА ГОЛОДА ДОЛЖНА РАБОТАТЬ КАЖДЫЙ ТИК (без IntervalTick)
-            if (pawn.needs.food != null)
+            // ЛОГИКА ГОЛОДА: Если кагуне не активно, замедляем голод на 95%
+            // Это позволяет гулю игнорировать штрафы метаболизма от других генов
+            if (pawn.needs.food != null && !IsKaguneActive())
             {
-                bool isActive = pawn.health.hediffSet.HasHediff(DefDatabase<HediffDef>.GetNamed("KaguneRinkaku", false));
-
-                if (!isActive)
-                {
-                    // Каждые 20 тиков позволяем еде упасть. В остальное время — восстанавливаем.
-                    // 1/20 = 5% скорости голода. Это обеспечит примерно 12-15 дней.
-                    if (!pawn.IsHashIntervalTick(20))
-                    {
-                        pawn.needs.food.CurLevel += pawn.needs.food.FoodFallPerTick;
-                    }
-                }
+                // Возвращаем пешке 95% от того, что она только что потеряла
+                pawn.needs.food.CurLevel += pawn.needs.food.FoodFallPerTick * 0.95f;
             }
         }
 
-        // Остальные методы (ManageKakugan, UpdateStatusEffects, PostAdd) остаются без изменений
+        // Универсальная проверка активного состояния любого кагуне
+        private bool IsKaguneActive()
+        {
+            return pawn.health.hediffSet.hediffs.Any(h =>
+                h.def.defName == "Hediff_Ukaku" ||
+                h.def.defName == "Hediff_Koukaku" ||
+                h.def.defName == "Hediff_Rinkaku" ||
+                h.def.defName == "Hediff_Bikaku");
+        }
+
+        private void UpdateStatusEffects(bool isKaguneActive)
+        {
+            if (pawn == null || !pawn.Spawned) return;
+
+            // Срыв в берсерк при критическом голоде (еда на нуле, но есть RC-клетки)
+            if (pawn.needs.food != null && pawn.needs.food.CurLevel <= 0.01f && Value > 0.1f)
+            {
+                if (!pawn.InMentalState && !IsDeathresting(pawn) && Rand.Value < 0.1f)
+                {
+                    pawn.mindState.mentalStateHandler.TryStartMentalState(MentalStateDefOf.Berserk, "Голод гуля", true);
+                }
+            }
+
+            // Если RC-клетки кончились, принудительно втягиваем ЛЮБОЕ кагуне
+            if (Value <= 0 && isKaguneActive)
+            {
+                string[] tags = { "Ukaku", "Koukaku", "Rinkaku", "Bikaku" };
+                var toRemove = pawn.health.hediffSet.hediffs
+                    .Where(h => tags.Any(tag => h.def.defName == "Hediff_" + tag))
+                    .ToList();
+
+                foreach (var h in toRemove) pawn.health.RemoveHediff(h);
+
+                Messages.Message("TokyoGhoul_KaguneRetractedCells".Translate(pawn.LabelShort), pawn, MessageTypeDefOf.NegativeEvent);
+                pawn.Drawer.renderer.SetAllGraphicsDirty();
+            }
+        }
+
         private void ManageKakugan(bool isKaguneActive)
         {
-            bool shouldHave = isKaguneActive || pawn.InMentalState;
             HediffDef kakuganDef = DefDatabase<HediffDef>.GetNamed("Kakugan", false);
             if (kakuganDef == null) return;
+
             bool currentlyHas = pawn.health.hediffSet.HasHediff(kakuganDef);
+            bool shouldHave = isKaguneActive || pawn.InMentalState;
 
             if (shouldHave && !currentlyHas)
             {
@@ -91,31 +131,51 @@ namespace TokyoGhoulMod
             }
         }
 
-        private void UpdateStatusEffects(bool isKaguneActive)
-        {
-            if (pawn == null || !pawn.Spawned) return;
-            if (pawn.needs.food != null && pawn.needs.food.CurLevel <= 0.01f && Value > 0.1f)
-            {
-                if (!pawn.InMentalState && !IsDeathresting(pawn) && Rand.Value < 0.1f)
-                {
-                    pawn.mindState.mentalStateHandler.TryStartMentalState(MentalStateDefOf.Berserk, "Голод гуля", true);
-                }
-            }
-            if (Value <= 0 && isKaguneActive)
-            {
-                Hediff kagu = pawn.health.hediffSet.GetFirstHediffOfDef(DefDatabase<HediffDef>.GetNamed("KaguneRinkaku"));
-                if (kagu != null) pawn.health.RemoveHediff(kagu);
-            }
-        }
-
         private bool IsDeathresting(Pawn p) => ModsConfig.BiotechActive && p.Deathresting;
 
         public override void PostAdd()
         {
             base.PostAdd();
+
+            // 1. Выдаем Какухо
             if (!pawn.health.hediffSet.HasHediff(DefDatabase<HediffDef>.GetNamed("Kakuho", false)))
+            {
                 pawn.health.AddHediff(DefDatabase<HediffDef>.GetNamed("Kakuho"), pawn.RaceProps.body.corePart);
-            Value = 0.5f;
+            }
+
+            // 2. Устанавливаем начальное значение RC-клеток
+            this.Value = 0.5f;
+
+            // 3. Автоматический выбор типа кагуне
+            bool hasKagune = pawn.genes.GenesListForReading.Any(g =>
+                g.def.exclusionTags != null && g.def.exclusionTags.Contains("KaguneType"));
+
+            if (!hasKagune)
+            {
+                string[] types = { "Gene_Ukaku", "Gene_Koukaku", "Gene_Rinkaku", "Gene_Bikaku" };
+                string chosenType = types.RandomElement();
+
+                GeneDef geneDef = DefDatabase<GeneDef>.GetNamed(chosenType, false);
+                if (geneDef != null)
+                {
+                    pawn.genes.AddGene(geneDef, true);
+
+                    // ПРИНУДИТЕЛЬНАЯ ВЫДАЧА СПОСОБНОСТЕЙ
+                    // Это гарантирует появление кнопок сразу после добавления гена
+                    if (geneDef.abilities != null)
+                    {
+                        foreach (AbilityDef ab in geneDef.abilities)
+                        {
+                            if (!pawn.abilities.abilities.Any(a => a.def == ab))
+                            {
+                                pawn.abilities.GainAbility(ab);
+                            }
+                        }
+                    }
+
+                    Messages.Message("У " + pawn.LabelShort + " проявился тип RC-клеток: " + geneDef.label, pawn, MessageTypeDefOf.PositiveEvent);
+                }
+            }
         }
     }
 }

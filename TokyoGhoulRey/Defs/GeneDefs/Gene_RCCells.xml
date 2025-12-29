@@ -23,35 +23,83 @@
     </resourceGizmoThresholds>
 
     <renderNodeProperties>
-      <li>
+      <!-- РИНКАКУ -->
+      <li Class="TokyoGhoulMod.PawnRenderNodeProperties_Kagune">
         <nodeClass>TokyoGhoulMod.PawnRenderNode_Kagune</nodeClass>
         <workerClass>TokyoGhoulMod.PawnRenderNodeWorker_Kagune</workerClass>
+        <kaguneTag>Rinkaku</kaguneTag> <!-- Код ищет Hediff_Rinkaku -->
         <texPath>Things/Pawn/Kagune/Rinkaku</texPath>
         <parentTagDef>Body</parentTagDef>
+        <graphicClass>Graphic_Single</graphicClass>
         <drawData>
           <defaultData>
             <layer>-2</layer>
-            <scale>1.5</scale>
           </defaultData>
-          <dataNorth>
-            <layer>80</layer>
-          </dataNorth>
         </drawData>
+        <baseScale>1.5</baseScale>
+      </li>
+
+      <!-- УКАКУ -->
+      <li Class="TokyoGhoulMod.PawnRenderNodeProperties_Kagune">
+        <nodeClass>TokyoGhoulMod.PawnRenderNode_Kagune</nodeClass>
+        <workerClass>TokyoGhoulMod.PawnRenderNodeWorker_Kagune</workerClass>
+        <kaguneTag>Ukaku</kaguneTag> <!-- Код ищет Hediff_Ukaku -->
+        <texPath>Things/Pawn/Kagune/Ukaku</texPath>
+        <parentTagDef>Body</parentTagDef>
+        <graphicClass>Graphic_Single</graphicClass>
+        <drawData>
+          <defaultData>
+            <layer>-2</layer>
+          </defaultData>
+        </drawData>
+        <baseScale>1.5</baseScale>
+      </li>
+
+      <!-- КОКАКУ -->
+      <li Class="TokyoGhoulMod.PawnRenderNodeProperties_Kagune">
+        <nodeClass>TokyoGhoulMod.PawnRenderNode_Kagune</nodeClass>
+        <workerClass>TokyoGhoulMod.PawnRenderNodeWorker_Kagune</workerClass>
+        <kaguneTag>Koukaku</kaguneTag> <!-- Код ищет Hediff_Koukaku -->
+        <texPath>Things/Pawn/Kagune/Koukaku</texPath>
+        <parentTagDef>Body</parentTagDef>
+        <graphicClass>Graphic_Single</graphicClass>
+        <drawData>
+          <defaultData>
+            <layer>-2</layer>
+          </defaultData>
+        </drawData>
+        <baseScale>1.3</baseScale>
+      </li>
+
+      <!-- БИКАКУ -->
+      <li Class="TokyoGhoulMod.PawnRenderNodeProperties_Kagune">
+        <nodeClass>TokyoGhoulMod.PawnRenderNode_Kagune</nodeClass>
+        <workerClass>TokyoGhoulMod.PawnRenderNodeWorker_Kagune</workerClass>
+        <kaguneTag>Bikaku</kaguneTag> <!-- Код ищет Hediff_Bikaku -->
+        <texPath>Things/Pawn/Kagune/Bikaku</texPath>
+        <parentTagDef>Body</parentTagDef>
+        <graphicClass>Graphic_Single</graphicClass>
+        <drawData>
+          <defaultData>
+            <layer>-2</layer>
+          </defaultData>
+        </drawData>
+        <baseScale>1.2</baseScale>
       </li>
     </renderNodeProperties>
 
-    <abilities>
-      <li>ReleaseKaguneRinkaku</li>
-    </abilities>
-
-    <biostatMet>-3</biostatMet> 
-    <biostatCpx>2</biostatCpx>
+    <biostatMet>2</biostatMet> 
+    <biostatCpx>3</biostatCpx>
     <displayOrderInCategory>100</displayOrderInCategory>
-    <showGuidance>true</showGuidance>
     
     <customEffectDescriptions>
       <li>Постепенно расходует запас RC-клеток при использовании способностей.</li>
+      <li>Может питаться только человечиной.</li>
     </customEffectDescriptions>
+	
+    <statFactors>
+      <HungerRateFactor>0.1</HungerRateFactor>
+    </statFactors>
   </GeneDef>
 
 </Defs>

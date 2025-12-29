@@ -4,3 +4,11 @@ E:\Project\RimModGhoul\ClassLibrary1\ClassLibrary1\obj\Debug\Mod.csproj.Assembly
 E:\Project\RimModGhoul\ClassLibrary1\ClassLibrary1\obj\Debug\Mod.csproj.CoreCompileInputs.cache
 E:\Project\RimModGhoul\ClassLibrary1\ClassLibrary1\obj\Debug\ClassLibrary1.dll
 E:\Project\RimModGhoul\ClassLibrary1\ClassLibrary1\obj\Debug\ClassLibrary1.pdb
+E:\Project\Games\KSteam\steamapps\common\RimWorld\Mods\TokyoGhoulRey\Assemblies\ClassLibrary1.dll
+E:\Project\Games\KSteam\steamapps\common\RimWorld\Mods\TokyoGhoulRey\Assemblies\ClassLibrary1.pdb
+E:\Project\RimModGhoul\TokyoGhoulMod_Project\TokyoGhoulRey\Assemblies\ClassLibrary1.dll
+E:\Project\RimModGhoul\TokyoGhoulMod_Project\TokyoGhoulRey\Assemblies\ClassLibrary1.pdb
+E:\Project\RimModGhoul\TokyoGhoulMod_Project\ClassLibrary1\ClassLibrary1\obj\Debug\Mod.csproj.AssemblyReference.cache
+E:\Project\RimModGhoul\TokyoGhoulMod_Project\ClassLibrary1\ClassLibrary1\obj\Debug\Mod.csproj.CoreCompileInputs.cache
+E:\Project\RimModGhoul\TokyoGhoulMod_Project\ClassLibrary1\ClassLibrary1\obj\Debug\ClassLibrary1.dll
+E:\Project\RimModGhoul\TokyoGhoulMod_Project\ClassLibrary1\ClassLibrary1\obj\Debug\ClassLibrary1.pdb

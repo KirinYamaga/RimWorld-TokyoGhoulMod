@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <AbilityDef Name="ReleaseKaguneBase" Abstract="True">
+    <abilityClass>TokyoGhoulMod.Ability_ToggleKagune</abilityClass>
+    <targetRequired>False</targetRequired>
+    <displayGizmoWhileUndrafted>True</displayGizmoWhileUndrafted>
+    <cooldownTicksRange>120</cooldownTicksRange>
+    <hostile>false</hostile>
+    <verbProperties>
+      <verbClass>Verb_CastAbility</verbClass>
+      <drawAimPie>False</drawAimPie>
+      <targetParams>
+        <canTargetSelf>True</canTargetSelf>
+      </targetParams>
+    </verbProperties>
+  </AbilityDef>
+
+  <!-- Переименованы defName, чтобы не конфликтовать с хедиффами -->
+  <AbilityDef ParentName="ReleaseKaguneBase">
+    <defName>Release_Ukaku</defName>
+    <label>Выпустить Укаку</label>
+    <description>Активирует или втягивает Укаку.</description>
+    <iconPath>UI/Abilities/Ukaku_Toggle</iconPath>
+  </AbilityDef>
+
+  <AbilityDef ParentName="ReleaseKaguneBase">
+    <defName>Release_Koukaku</defName>
+    <label>Выпустить Кокаку</label>
+    <description>Активирует или втягивает Кокаку.</description>
+    <iconPath>UI/Abilities/Koukaku_Toggle</iconPath>
+  </AbilityDef>
+
+  <AbilityDef ParentName="ReleaseKaguneBase">
+    <defName>Release_Rinkaku</defName>
+    <label>Выпустить Ринкаку</label>
+    <description>Активирует или втягивает Ринкаку.</description>
+    <iconPath>UI/Abilities/Rinkaku_Toggle</iconPath>
+  </AbilityDef>
+
+  <AbilityDef ParentName="ReleaseKaguneBase">
+    <defName>Release_Bikaku</defName>
+    <label>Выпустить Бикаку</label>
+    <description>Активирует или втягивает Бикаку.</description>
+    <iconPath>UI/Abilities/Bikaku_Toggle</iconPath>
+  </AbilityDef>
+
+  <AbilityDef>
+    <defName>Ukaku_Fire</defName>
+    <label>Залп кристаллами</label>
+    <description>Выстреливает очередью острых RC-кристаллов. Требует активного Укаку.</description>
+    <abilityClass>TokyoGhoulMod.Ability_UkakuFire</abilityClass>
+    <iconPath>UI/Abilities/Ukaku_Fire</iconPath>
+    <displayGizmoWhileUndrafted>False</displayGizmoWhileUndrafted>
+    <cooldownTicksRange>180</cooldownTicksRange>
+    <verbProperties>
+      <verbClass>Verb_CastAbility</verbClass> <!-- Это вызывает метод Activate в C# -->
+      <range>24.9</range>
+      <warmupTime>0.6</warmupTime>
+      <burstShotCount>3</burstShotCount>
+      <ticksBetweenBurstShots>6</ticksBetweenBurstShots>
+      <soundCast>Shot_BoltAction</soundCast>
+      <muzzleFlashScale>0</muzzleFlashScale>
+      <defaultProjectile>RC_Shard</defaultProjectile>
+      <targetParams>
+        <canTargetPawns>True</canTargetPawns>
+        <canTargetLocations>True</canTargetLocations>
+      </targetParams>
+    </verbProperties>
+  </AbilityDef>
+
+</Defs>

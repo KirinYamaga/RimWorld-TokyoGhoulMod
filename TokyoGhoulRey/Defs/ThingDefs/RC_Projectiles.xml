@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <ThingDef ParentName="BaseBullet"> <!-- Используем базу пуль для простоты -->
+    <defName>RC_Shard</defName>
+    <label>RC-кристалл</label>
+    <graphicData>
+      <texPath>Things/Projectile/RCShard</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <projectile>
+      <damageDef>Stab</damageDef>
+      <damageAmountBase>20</damageAmountBase>
+      <speed>100</speed>
+      <armorPenetrationBase>0.40</armorPenetrationBase>
+    </projectile>
+  </ThingDef>
+</Defs>

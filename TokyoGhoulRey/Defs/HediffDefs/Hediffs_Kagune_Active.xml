@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <HediffDef Name="KaguneActiveBase" Abstract="True">
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(0.8, 0.1, 0.1)</defaultLabelColor>
+    <isBad>false</isBad>
+    <priceImpact>false</priceImpact>
+  </HediffDef>
+
+  <HediffDef ParentName="KaguneActiveBase">
+    <defName>Hediff_Ukaku</defName>
+    <label>Кагуне (Укаку)</label>
+    <description>Крылоподобное кагуне. Позволяет двигаться невероятно быстро и стрелять кристаллизованными RC-клетками, но быстро истощает владельца.</description>
+    <stages>
+      <li>
+        <statOffsets>
+          <MoveSpeed>1.5</MoveSpeed>
+		  <ShootingAccuracyPawn>7.0</ShootingAccuracyPawn>
+          <MeleeHitChance>2.0</MeleeHitChance>
+        </statOffsets>
+        <statFactors>
+          <IncomingDamageFactor>1.2</IncomingDamageFactor> <!-- Получает на 20% больше урона -->
+        </statFactors>
+        <capMods>
+          <li><capacity>Consciousness</capacity><offset>0.1</offset></li>
+        </capMods>
+      </li>
+    </stages>
+    <comps>
+      <li Class="HediffCompProperties_VerbGiver">
+        <tools>
+          <li>
+            <label>удар крылом укаку</label>
+            <capacities><li>Cut</li></capacities>
+            <power>12</power>
+            <cooldownTime>0.8</cooldownTime> <!-- Очень быстрая атака -->
+          </li>
+        </tools>
+      </li>
+    </comps>
+  </HediffDef>
+
+  <HediffDef ParentName="KaguneActiveBase">
+    <defName>Hediff_Koukaku</defName>
+    <label>Кагуне (Кокаку)</label>
+    <description>Тяжелое и прочное кагуне, обвивающее руку подобно щиту или мечу. Обладает колоссальной прочностью, но сильно ограничивает подвижность.</description>
+    <stages>
+      <li>
+        <statOffsets>
+          <ArmorRating_Sharp>0.50</ArmorRating_Sharp>
+          <ArmorRating_Blunt>0.30</ArmorRating_Blunt>
+          <MoveSpeed>-0.8</MoveSpeed> <!-- Сильное замедление -->
+        </statOffsets>
+      </li>
+    </stages>
+    <comps>
+      <li Class="HediffCompProperties_VerbGiver">
+        <tools>
+          <li>
+            <label>лезвие кокаку</label>
+            <capacities><li>Stab</li><li>Blunt</li></capacities>
+            <power>28</power> <!-- Огромный урон -->
+            <cooldownTime>2.2</cooldownTime>
+            <armorPenetration>0.6</armorPenetration>
+          </li>
+        </tools>
+      </li>
+    </comps>
+  </HediffDef>
+
+  <HediffDef ParentName="KaguneActiveBase">
+    <defName>Hediff_Rinkaku</defName>
+    <label>Кагуне (Ринкаку)</label>
+    <description>Чешуйчатые щупальца, обладающие огромной силой удара и способностью ускорять регенерацию владельца ценой повышенной болевой чувствительности.</description>
+    <stages>
+      <li>
+        <statOffsets>
+          <PainShockThreshold>-0.10</PainShockThreshold> <!-- Быстрее падает от боли -->
+          <MeleeDamageFactor>0.25</MeleeDamageFactor>
+        </statOffsets>
+        <statFactors>
+            <InjuryHealingFactor>3.0</InjuryHealingFactor> <!-- Реген x3 -->
+        </statFactors>
+      </li>
+    </stages>
+    <comps>
+      <li Class="HediffCompProperties_VerbGiver">
+        <tools>
+          <li>
+            <label>щупальце ринкаку</label>
+            <capacities><li>Cut</li></capacities>
+            <power>20</power>
+            <cooldownTime>1.2</cooldownTime>
+            <chanceFactor>2.0</chanceFactor>
+          </li>
+        </tools>
+      </li>
+    </comps>
+  </HediffDef>
+
+  <HediffDef ParentName="KaguneActiveBase">
+    <defName>Hediff_Bikaku</defName>
+    <label>Кагуне (Бикаку)</label>
+    <description>Хвостатое кагуне, не имеющее ярких недостатков. Идеально подходит для защиты и маневрирования в ближнем бою.</description>
+    <stages>
+      <li>
+        <statOffsets>
+          <MeleeDodgeChance>15</MeleeDodgeChance>
+          <MoveSpeed>0.3</MoveSpeed>
+        </statOffsets>
+      </li>
+    </stages>
+    <comps>
+      <li Class="HediffCompProperties_VerbGiver">
+        <tools>
+          <li>
+            <label>хвост бикаку</label>
+            <capacities><li>Blunt</li><li>Poke</li></capacities>
+            <power>16</power>
+            <cooldownTime>1.0</cooldownTime>
+          </li>
+        </tools>
+      </li>
+    </comps>
+  </HediffDef>
+
+</Defs>

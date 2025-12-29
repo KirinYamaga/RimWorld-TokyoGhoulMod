@@ -27,7 +27,7 @@
     <isBad>false</isBad>
     <stages>
       <li>
-        <minSeverity>0.1</minSeverity>
+        <severityPerDay>0.1</severityPerDay>
         <label>стадия 1</label>
         <capMods>
           <li>
@@ -55,7 +55,7 @@
       <li>
         <filter>
           <thingDefs>
-            <li>KakuhoRinkakuItem</li>
+            <li>Kakuho_Item</li>
           </thingDefs>
         </filter>
         <count>1</count>
@@ -63,7 +63,7 @@
     </ingredients>
     <fixedIngredientFilter>
       <thingDefs>
-        <li>KakuhoRinkakuItem</li>
+        <li>Kakuho_Item</li>
       </thingDefs>
     </fixedIngredientFilter>
     <appliedOnFixedBodyParts>

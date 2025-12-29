@@ -29,24 +29,32 @@ namespace TokyoGhoulMod
 
         // В Постфиксе мы начисляем RC-клетки ИЛИ вызываем рвоту
         [HarmonyPostfix]
-        public static void Postfix(Thing __instance, Pawn ingester, float __result)
+        public static void Postfix(Thing __instance, Pawn ingester, ref float __result)
         {
             if (ingester?.genes == null) return;
-
             Gene_RCCells gene = ingester.genes.GetFirstGeneOfType<Gene_RCCells>();
             if (gene == null) return;
 
             if (IsHumanlikeMeat(__instance))
             {
-                // Начисляем RC-клетки (используем константу, так как __result теперь может быть 0)
-                // Рекомендую использовать питание самого предмета: __instance.def.ingestible.CachedNutrition
                 float nutritionValue = __instance.def.ingestible?.CachedNutrition ?? 0.1f;
+                // Начисляем RC-клетки: 1 единица питания = 0.5 шкалы RC
                 gene.Value += nutritionValue * 0.5f;
             }
             else if (IsNormalFood(__instance))
             {
-                // Вызываем рвоту БЕЗ прерывания джоба (игра сама завершит его после Ingested)
-                ApplyGhoulishRejection(ingester);
+                // Вместо мгновенного прерывания джоба, добавляем хедифф отравления
+                // Рвота произойдет сама из-за FoodPoisoning или через HediffComp_Vomit
+                ingester.health.AddHediff(HediffDefOf.FoodPoisoning, null, null);
+
+                // Сбрасываем уровень еды обратно (наказание за обычную еду)
+                if (ingester.needs.food != null)
+                {
+                    ingester.needs.food.CurLevel -= __result; // Отнимаем то, что он только что съел
+                }
+                __result = 0f;
+
+                Messages.Message("TokyoGhoul_GhoulsCantEatNormalFood".Translate(), ingester, MessageTypeDefOf.NegativeEvent);
             }
         }
 

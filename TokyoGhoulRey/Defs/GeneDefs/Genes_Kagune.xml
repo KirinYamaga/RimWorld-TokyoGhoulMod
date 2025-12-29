@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <!-- Базовый шаблон для генов кагуне -->
+  <GeneDef Name="KaguneTypeBase" Abstract="True">
+    <displayCategory>TG_Kagune</displayCategory>
+    <exclusionTags>
+      <li>KaguneType</li> <!-- Только один тип кагуне одновременно -->
+    </exclusionTags>
+    <biostatCpx>3</biostatCpx>
+    <biostatMet>-2</biostatMet>
+    <displayOrderInCategory>200</displayOrderInCategory>
+  </GeneDef>
+
+  <!-- УКАКУ -->
+  <GeneDef ParentName="KaguneTypeBase">
+    <defName>Gene_Ukaku</defName>
+    <label>Укаку</label>
+    <description>Кагуне в форме крыльев. Специализируется на скорости и дальних атаках шипами.</description>
+    <iconPath>UI/Icons/Genes/Gene_Ukaku</iconPath>
+    <abilities>
+      <li>Release_Ukaku</li>
+      <li>Ukaku_Fire</li>
+    </abilities>
+    <renderNodeProperties>
+      <li>
+        <nodeClass>TokyoGhoulMod.PawnRenderNode_Kagune</nodeClass>
+        <workerClass>TokyoGhoulMod.PawnRenderNodeWorker_Kagune</workerClass>
+        <kaguneTag>Ukaku</kaguneTag> <!-- Соответствует Hediff_Ukaku -->
+        <texPath>Things/Pawn/Kagune/Ukaku/Ukaku</texPath>
+        <parentTagDef>Body</parentTagDef>
+        <drawData>
+          <defaultData><layer>-2</layer><scale>1.5</scale></defaultData>
+          <dataNorth><layer>80</layer></dataNorth>
+        </drawData>
+      </li>
+    </renderNodeProperties>
+  </GeneDef>
+
+  <!-- КОКАКУ -->
+  <GeneDef ParentName="KaguneTypeBase">
+    <defName>Gene_Koukaku</defName>
+    <label>Кокаку</label>
+    <description>Тяжелое кагуне из высокой плотности RC-клеток. Обеспечивает защиту, но снижает скорость.</description>
+    <iconPath>UI/Icons/Genes/Gene_Koukaku</iconPath>
+    <abilities>
+      <li>Release_Koukaku</li>
+    </abilities>
+    <renderNodeProperties>
+      <li>
+        <nodeClass>TokyoGhoulMod.PawnRenderNode_Kagune</nodeClass>
+        <workerClass>TokyoGhoulMod.PawnRenderNodeWorker_Kagune</workerClass>
+        <kaguneTag>Koukaku</kaguneTag> <!-- Соответствует Hediff_Koukaku -->
+        <texPath>Things/Pawn/Kagune/Koukaku/Koukaku</texPath>
+        <parentTagDef>Body</parentTagDef>
+        <drawData>
+          <defaultData><layer>-2</layer><scale>1.3</scale></defaultData>
+        </drawData>
+      </li>
+    </renderNodeProperties>
+  </GeneDef>
+
+  <!-- РИНКАКУ -->
+  <GeneDef ParentName="KaguneTypeBase">
+    <defName>Gene_Rinkaku</defName>
+    <label>Ринкаку</label>
+    <description>Щупальца с мощной силой удара и быстрой регенерацией.</description>
+    <iconPath>UI/Icons/Genes/Gene_Rinkaku</iconPath>
+    <abilities>
+      <li>Release_Rinkaku</li>
+    </abilities>
+    <renderNodeProperties>
+      <li>
+        <nodeClass>TokyoGhoulMod.PawnRenderNode_Kagune</nodeClass>
+        <workerClass>TokyoGhoulMod.PawnRenderNodeWorker_Kagune</workerClass>
+        <kaguneTag>Rinkaku</kaguneTag>
+        <texPath>Things/Pawn/Kagune/Rinkaku/Rinkaku</texPath>
+        <parentTagDef>Body</parentTagDef>
+        <drawData>
+          <defaultData><layer>-2</layer><scale>1.6</scale></defaultData>
+          <dataNorth><layer>80</layer></dataNorth>
+        </drawData>
+      </li>
+    </renderNodeProperties>
+  </GeneDef>
+
+  <!-- БИКАКУ -->
+  <GeneDef ParentName="KaguneTypeBase">
+    <defName>Gene_Bikaku</defName>
+    <label>Бикаку</label>
+    <description>Сбалансированное хвостатое кагуне. Хорошо подходит для любой ситуации.</description>
+    <iconPath>UI/Icons/Genes/Gene_Bikaku</iconPath>
+    <abilities>
+      <li>Release_Bikaku</li>
+    </abilities>
+    <renderNodeProperties>
+      <li>
+        <nodeClass>TokyoGhoulMod.PawnRenderNode_Kagune</nodeClass>
+        <workerClass>TokyoGhoulMod.PawnRenderNodeWorker_Kagune</workerClass>
+        <kaguneTag>Bikaku</kaguneTag>
+        <texPath>Things/Pawn/Kagune/Bikaku/Bikaku</texPath>
+        <parentTagDef>Body</parentTagDef>
+        <drawData>
+          <defaultData><layer>-2</layer><scale>1.3</scale></defaultData>
+          <dataNorth><layer>10</layer></dataNorth>
+        </drawData>
+      </li>
+    </renderNodeProperties>
+  </GeneDef>
+
+</Defs>
