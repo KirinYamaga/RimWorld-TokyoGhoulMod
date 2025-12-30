@@ -35,31 +35,11 @@
   </loadAfter>
 </ModMetaData>
 
-/TokyoGhoulRey/Defs/AbilityDefs/Abilities_Ghoul.xml
-========================================
-<?xml version="1.0" encoding="utf-8" ?>
-<Defs>
-<AbilityDef>
-  <defName>ReleaseKaguneRinkaku</defName>
-  <label>Выпустить кагуне</label>
-  <abilityClass>TokyoGhoulMod.Ability_ReleaseKagune</abilityClass>
-  <displayGizmoWhileUndrafted>true</displayGizmoWhileUndrafted> <targetRequired>False</targetRequired>
-  <verbProperties>
-    <verbClass>Verb_CastAbility</verbClass>
-    <drawAimPie>False</drawAimPie>
-    <targetParams>
-      <canTargetSelf>True</canTargetSelf>
-    </targetParams>
-  </verbProperties>
-</AbilityDef>
-</Defs>
-
 /TokyoGhoulRey/Defs/AbilityDefs/Abilities_Kagune.xml
 ========================================
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
 
-  <!-- Базовая способность переключения -->
   <AbilityDef Name="ReleaseKaguneBase" Abstract="True">
     <abilityClass>TokyoGhoulMod.Ability_ToggleKagune</abilityClass>
     <targetRequired>False</targetRequired>
@@ -75,6 +55,7 @@
     </verbProperties>
   </AbilityDef>
 
+  <!-- Переименованы defName, чтобы не конфликтовать с хедиффами -->
   <AbilityDef ParentName="ReleaseKaguneBase">
     <defName>Release_Ukaku</defName>
     <label>Выпустить Укаку</label>
@@ -103,7 +84,6 @@
     <iconPath>UI/Abilities/Bikaku_Toggle</iconPath>
   </AbilityDef>
 
-  <!-- СПЕЦ-СПОСОБНОСТЬ: Стрельба Укаку -->
   <AbilityDef>
     <defName>Ukaku_Fire</defName>
     <label>Залп кристаллами</label>
@@ -112,14 +92,13 @@
     <iconPath>UI/Abilities/Ukaku_Fire</iconPath>
     <displayGizmoWhileUndrafted>False</displayGizmoWhileUndrafted>
     <cooldownTicksRange>180</cooldownTicksRange>
-    <aiCanUse>True</aiCanUse>
     <verbProperties>
-      <verbClass>Verb_CastAbility</verbClass>
+      <verbClass>Verb_CastAbility</verbClass> <!-- Это вызывает метод Activate в C# -->
       <range>24.9</range>
-      <warmupTime>0.5</warmupTime>
-      <burstShotCount>5</burstShotCount> <!-- Пять выстрелов за раз -->
-      <ticksBetweenBurstShots>5</ticksBetweenBurstShots>
-      <soundCast>GunShot_BoltAction</soundCast>
+      <warmupTime>0.6</warmupTime>
+      <burstShotCount>3</burstShotCount>
+      <ticksBetweenBurstShots>6</ticksBetweenBurstShots>
+      <soundCast>Shot_BoltAction</soundCast>
       <muzzleFlashScale>0</muzzleFlashScale>
       <defaultProjectile>RC_Shard</defaultProjectile>
       <targetParams>
@@ -265,8 +244,6 @@
     <resourceDef>RCCells</resourceDef> 
     
     <resourceGizmoType>TokyoGhoulMod.GeneGizmo_RCCells</resourceGizmoType>
-    
-    <!-- В 1.5/1.6 это поле всё еще полезно для визуальных меток на шкале -->
     <resourceGizmoThresholds>
       <li>0.2</li>
       <li>0.5</li>
@@ -274,26 +251,76 @@
     </resourceGizmoThresholds>
 
     <renderNodeProperties>
-      <li>
+      <!-- РИНКАКУ (Направленный) -->
+      <li Class="TokyoGhoulMod.PawnRenderNodeProperties_Kagune">
         <nodeClass>TokyoGhoulMod.PawnRenderNode_Kagune</nodeClass>
         <workerClass>TokyoGhoulMod.PawnRenderNodeWorker_Kagune</workerClass>
-        <texPath>Things/Pawn/Kagune/Rinkaku</texPath>
+        <kaguneTag>Rinkaku</kaguneTag>
+        <texPath>Things/Pawn/Kagune/Rinkaku/Rinkaku</texPath>
         <parentTagDef>Body</parentTagDef>
+        <graphicClass>Graphic_Multi</graphicClass> <!-- ИЗМЕНЕНО -->
+        <drawData>
+          <defaultData>
+            <layer>-2</layer> <!-- За пешкой по умолчанию -->
+          </defaultData>
+          <dataNorth>
+            <layer>80</layer> <!-- Перед пешкой, когда она смотрит вверх (на север) -->
+          </dataNorth>
+        </drawData>
+        <baseScale>1.5</baseScale>
+      </li>
+
+      <!-- УКАКУ (Направленный) -->
+      <li Class="TokyoGhoulMod.PawnRenderNodeProperties_Kagune">
+        <nodeClass>TokyoGhoulMod.PawnRenderNode_Kagune</nodeClass>
+        <workerClass>TokyoGhoulMod.PawnRenderNodeWorker_Kagune</workerClass>
+        <kaguneTag>Ukaku</kaguneTag>
+        <texPath>Things/Pawn/Kagune/Ukaku/Ukaku</texPath>
+        <parentTagDef>Body</parentTagDef>
+        <graphicClass>Graphic_Multi</graphicClass> <!-- ИЗМЕНЕНО -->
         <drawData>
           <defaultData>
             <layer>-2</layer>
-            <scale>1.5</scale>
           </defaultData>
           <dataNorth>
             <layer>80</layer>
           </dataNorth>
         </drawData>
+        <baseScale>1.5</baseScale>
+      </li>
+
+      <!-- КОКАКУ (Остается одиночным, пока нет текстур сторон) -->
+      <li Class="TokyoGhoulMod.PawnRenderNodeProperties_Kagune">
+        <nodeClass>TokyoGhoulMod.PawnRenderNode_Kagune</nodeClass>
+        <workerClass>TokyoGhoulMod.PawnRenderNodeWorker_Kagune</workerClass>
+        <kaguneTag>Koukaku</kaguneTag>
+        <texPath>Things/Pawn/Kagune/Koukaku</texPath>
+        <parentTagDef>Body</parentTagDef>
+        <graphicClass>Graphic_Single</graphicClass>
+        <drawData>
+          <defaultData>
+            <layer>-2</layer>
+          </defaultData>
+        </drawData>
+        <baseScale>1.3</baseScale>
+      </li>
+
+      <!-- БИКАКУ (Остается одиночным, пока нет текстур сторон) -->
+      <li Class="TokyoGhoulMod.PawnRenderNodeProperties_Kagune">
+        <nodeClass>TokyoGhoulMod.PawnRenderNode_Kagune</nodeClass>
+        <workerClass>TokyoGhoulMod.PawnRenderNodeWorker_Kagune</workerClass>
+        <kaguneTag>Bikaku</kaguneTag>
+        <texPath>Things/Pawn/Kagune/Bikaku</texPath>
+        <parentTagDef>Body</parentTagDef>
+        <graphicClass>Graphic_Single</graphicClass>
+        <drawData>
+          <defaultData>
+            <layer>-2</layer>
+          </defaultData>
+        </drawData>
+        <baseScale>1.2</baseScale>
       </li>
     </renderNodeProperties>
-
-    <abilities>
-      <li>ReleaseKaguneRinkaku</li>
-    </abilities>
 
     <biostatMet>2</biostatMet> 
     <biostatCpx>3</biostatCpx>
@@ -301,11 +328,11 @@
     
     <customEffectDescriptions>
       <li>Постепенно расходует запас RC-клеток при использовании способностей.</li>
-      <li>Может питаться только человечиной (эффект от Harmony патча).</li>
+      <li>Может питаться только человечиной.</li>
     </customEffectDescriptions>
 	
     <statFactors>
-      <HungerRateMultiplier>0.1</HungerRateMultiplier>
+      <HungerRateFactor>0.1</HungerRateFactor>
     </statFactors>
   </GeneDef>
 
@@ -370,6 +397,7 @@
       <li>
         <statOffsets>
           <MoveSpeed>1.5</MoveSpeed>
+		  <ShootingAccuracyPawn>7.0</ShootingAccuracyPawn>
           <MeleeHitChance>2.0</MeleeHitChance>
         </statOffsets>
         <statFactors>
@@ -387,7 +415,7 @@
             <label>удар крылом укаку</label>
             <capacities><li>Cut</li></capacities>
             <power>12</power>
-            <cooldownTime>0.6</cooldownTime> <!-- Очень быстрая атака -->
+            <cooldownTime>0.8</cooldownTime> <!-- Очень быстрая атака -->
           </li>
         </tools>
       </li>
@@ -478,45 +506,6 @@
     </comps>
   </HediffDef>
 
-</Defs>
-
-/TokyoGhoulRey/Defs/HediffDefs/Kagune_Rinkaku.xml
-========================================
-<?xml version="1.0" encoding="utf-8" ?>
-<Defs>
-  <HediffDef>
-    <defName>KaguneRinkaku</defName>
-    <label>Кагуне (Ринкаку)</label>
-    <description>Мощное щупальце из RC-клеток. В активном состоянии значительно повышает боевые способности гуля, заменяя обычные удары сокрушительными атаками.</description>
-    <hediffClass>TokyoGhoulMod.Hediff_KaguneRinkaku</hediffClass>
-    <defaultLabelColor>(0.8, 0, 0)</defaultLabelColor>
-    <isBad>false</isBad>
-    <priceImpact>false</priceImpact>
-    <comps>
-      <li Class="HediffCompProperties_VerbGiver">
-        <tools>
-          <li>
-            <label>щупальце ринкаку</label>
-            <capacities>
-              <li>Cut</li> </capacities>
-            <power>22</power>
-            <cooldownTime>1.0</cooldownTime> <alwaysBurnInMessages>true</alwaysBurnInMessages>
-            <soundMeleeHitSharp>Pawn_Melee_Punch_HitPawn</soundMeleeHitSharp>
-            <linkedBodyPartsGroup>Torso</linkedBodyPartsGroup> <ensureLinkedBodyPartsGroup>Torso</ensureLinkedBodyPartsGroup>
-            <chanceFactor>10.0</chanceFactor> 
-          </li>
-        </tools>
-      </li>
-    </comps>
-    <stages>
-      <li>
-        <statOffsets>
-          <MeleeHitChance>4.0</MeleeHitChance> 
-          <MoveSpeed>0.8</MoveSpeed>
-        </statOffsets>
-      </li>
-    </stages>
-  </HediffDef>
 </Defs>
 
 /TokyoGhoulRey/Defs/HediffDefs/Kakuho_Rinkaku.xml
@@ -664,24 +653,18 @@
 ========================================
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
-  <ThingDef>
+  <ThingDef ParentName="BaseBullet"> <!-- Используем базу пуль для простоты -->
     <defName>RC_Shard</defName>
     <label>RC-кристалл</label>
-    <category>Projectile</category>
-    <tickerType>Normal</tickerType>
-    <altitudeLayer>Projectile</altitudeLayer>
-    <thingClass>Bullet</thingClass>
-    <useHitPoints>False</useHitPoints>
-    <neverMultiSelect>True</neverMultiSelect>
     <graphicData>
       <texPath>Things/Projectile/RCShard</texPath>
       <graphicClass>Graphic_Single</graphicClass>
     </graphicData>
     <projectile>
       <damageDef>Stab</damageDef>
-      <damageAmountBase>12</damageAmountBase>
-      <speed>65</speed>
-      <armorPenetrationBase>0.35</armorPenetrationBase>
+      <damageAmountBase>20</damageAmountBase>
+      <speed>100</speed>
+      <armorPenetrationBase>0.40</armorPenetrationBase>
     </projectile>
   </ThingDef>
 </Defs>

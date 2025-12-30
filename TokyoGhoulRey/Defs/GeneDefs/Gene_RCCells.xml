@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
-
   <GeneResourceDef>
     <defName>RCCells</defName>
     <label>RC-клетки</label>
@@ -11,95 +10,18 @@
   <GeneDef>
     <defName>Gene_RCCells</defName>
     <label>Биология гуля</label>
-    <description>Особая биология гуля. В состоянии покоя метаболизм замедлен настолько, что позволяет обходиться без пищи до 15 дней. Однако активация кагуне требует колоссальных затрат энергии.</description>
+    <description>Особая биология гуля...</description>
     <geneClass>TokyoGhoulMod.Gene_RCCells</geneClass>
     <resourceDef>RCCells</resourceDef> 
-    
     <resourceGizmoType>TokyoGhoulMod.GeneGizmo_RCCells</resourceGizmoType>
     <resourceGizmoThresholds>
-      <li>0.2</li>
-      <li>0.5</li>
-      <li>0.8</li>
+      <li>0.2</li><li>0.5</li><li>0.8</li>
     </resourceGizmoThresholds>
-
-    <renderNodeProperties>
-      <!-- РИНКАКУ -->
-      <li Class="TokyoGhoulMod.PawnRenderNodeProperties_Kagune">
-        <nodeClass>TokyoGhoulMod.PawnRenderNode_Kagune</nodeClass>
-        <workerClass>TokyoGhoulMod.PawnRenderNodeWorker_Kagune</workerClass>
-        <kaguneTag>Rinkaku</kaguneTag> <!-- Код ищет Hediff_Rinkaku -->
-        <texPath>Things/Pawn/Kagune/Rinkaku</texPath>
-        <parentTagDef>Body</parentTagDef>
-        <graphicClass>Graphic_Single</graphicClass>
-        <drawData>
-          <defaultData>
-            <layer>-2</layer>
-          </defaultData>
-        </drawData>
-        <baseScale>1.5</baseScale>
-      </li>
-
-      <!-- УКАКУ -->
-      <li Class="TokyoGhoulMod.PawnRenderNodeProperties_Kagune">
-        <nodeClass>TokyoGhoulMod.PawnRenderNode_Kagune</nodeClass>
-        <workerClass>TokyoGhoulMod.PawnRenderNodeWorker_Kagune</workerClass>
-        <kaguneTag>Ukaku</kaguneTag> <!-- Код ищет Hediff_Ukaku -->
-        <texPath>Things/Pawn/Kagune/Ukaku</texPath>
-        <parentTagDef>Body</parentTagDef>
-        <graphicClass>Graphic_Single</graphicClass>
-        <drawData>
-          <defaultData>
-            <layer>-2</layer>
-          </defaultData>
-        </drawData>
-        <baseScale>1.5</baseScale>
-      </li>
-
-      <!-- КОКАКУ -->
-      <li Class="TokyoGhoulMod.PawnRenderNodeProperties_Kagune">
-        <nodeClass>TokyoGhoulMod.PawnRenderNode_Kagune</nodeClass>
-        <workerClass>TokyoGhoulMod.PawnRenderNodeWorker_Kagune</workerClass>
-        <kaguneTag>Koukaku</kaguneTag> <!-- Код ищет Hediff_Koukaku -->
-        <texPath>Things/Pawn/Kagune/Koukaku</texPath>
-        <parentTagDef>Body</parentTagDef>
-        <graphicClass>Graphic_Single</graphicClass>
-        <drawData>
-          <defaultData>
-            <layer>-2</layer>
-          </defaultData>
-        </drawData>
-        <baseScale>1.3</baseScale>
-      </li>
-
-      <!-- БИКАКУ -->
-      <li Class="TokyoGhoulMod.PawnRenderNodeProperties_Kagune">
-        <nodeClass>TokyoGhoulMod.PawnRenderNode_Kagune</nodeClass>
-        <workerClass>TokyoGhoulMod.PawnRenderNodeWorker_Kagune</workerClass>
-        <kaguneTag>Bikaku</kaguneTag> <!-- Код ищет Hediff_Bikaku -->
-        <texPath>Things/Pawn/Kagune/Bikaku</texPath>
-        <parentTagDef>Body</parentTagDef>
-        <graphicClass>Graphic_Single</graphicClass>
-        <drawData>
-          <defaultData>
-            <layer>-2</layer>
-          </defaultData>
-        </drawData>
-        <baseScale>1.2</baseScale>
-      </li>
-    </renderNodeProperties>
-
     <biostatMet>2</biostatMet> 
     <biostatCpx>3</biostatCpx>
     <displayOrderInCategory>100</displayOrderInCategory>
-    
-    <customEffectDescriptions>
-      <li>Постепенно расходует запас RC-клеток при использовании способностей.</li>
-      <li>Может питаться только человечиной.</li>
-    </customEffectDescriptions>
-	
     <statFactors>
-      <HungerRateFactor>0.1</HungerRateFactor>
+      <HungerRateMultiplier>0.1</HungerRateMultiplier>
     </statFactors>
   </GeneDef>
-
 </Defs>
