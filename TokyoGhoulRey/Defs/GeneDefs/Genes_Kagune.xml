@@ -61,23 +61,22 @@
 
   <!-- КОКАКУ -->
   <GeneDef ParentName="KaguneTypeBase">
-    <defName>Gene_Koukaku</defName>
+    <defName>Gene_Kokaku</defName>
     <label>Кокаку</label>
-    <description>Тяжелое кагуне из высокой плотности RC-клеток. Обеспечивает защиту, но снижает скорость.</description>
-    <iconPath>UI/Icons/Genes/Gene_Koukaku</iconPath>
-    <abilities>
-      <li>Release_Koukaku</li>
-    </abilities>
+    <abilities><li>Release_Kokaku</li></abilities>
     <renderNodeProperties>
-      <li>
+      <li Class="TokyoGhoulMod.PawnRenderNodeProperties_Kagune">
         <nodeClass>TokyoGhoulMod.PawnRenderNode_Kagune</nodeClass>
         <workerClass>TokyoGhoulMod.PawnRenderNodeWorker_Kagune</workerClass>
-        <kaguneTag>Koukaku</kaguneTag> <!-- Соответствует Hediff_Koukaku -->
-        <texPath>Things/Pawn/Kagune/Koukaku/Koukaku</texPath>
+        <kaguneTag>Kokaku</kaguneTag>
+        <texPath>Things/Pawn/Kagune/Kokaku</texPath>
         <parentTagDef>Body</parentTagDef>
+        <graphicClass>Graphic_Multi</graphicClass>
         <drawData>
-          <defaultData><layer>-2</layer><scale>1.3</scale></defaultData>
+          <defaultData><layer>-2</layer></defaultData>
+          <dataNorth><layer>80</layer></dataNorth>
         </drawData>
+        <baseScale>1.6</baseScale>
       </li>
     </renderNodeProperties>
   </GeneDef>
@@ -86,22 +85,20 @@
   <GeneDef ParentName="KaguneTypeBase">
     <defName>Gene_Bikaku</defName>
     <label>Бикаку</label>
-    <description>Сбалансированное хвостатое кагуне. Хорошо подходит для любой ситуации.</description>
-    <iconPath>UI/Icons/Genes/Gene_Bikaku</iconPath>
-    <abilities>
-      <li>Release_Bikaku</li>
-    </abilities>
+    <abilities><li>Release_Bikaku</li></abilities>
     <renderNodeProperties>
-      <li>
+      <li Class="TokyoGhoulMod.PawnRenderNodeProperties_Kagune">
         <nodeClass>TokyoGhoulMod.PawnRenderNode_Kagune</nodeClass>
         <workerClass>TokyoGhoulMod.PawnRenderNodeWorker_Kagune</workerClass>
         <kaguneTag>Bikaku</kaguneTag>
-        <texPath>Things/Pawn/Kagune/Bikaku/Bikaku</texPath>
+        <texPath>Things/Pawn/Kagune/Bikaku</texPath>
         <parentTagDef>Body</parentTagDef>
+        <graphicClass>Graphic_Multi</graphicClass>
         <drawData>
-          <defaultData><layer>-2</layer><scale>1.3</scale></defaultData>
-          <dataNorth><layer>10</layer></dataNorth>
+          <defaultData><layer>-2</layer></defaultData>
+          <dataNorth><layer>80</layer></dataNorth>
         </drawData>
+        <baseScale>1.6</baseScale>
       </li>
     </renderNodeProperties>
   </GeneDef>
