@@ -6,6 +6,7 @@ namespace TokyoGhoulMod
 {
     public class Ability_UkakuFire : Ability
     {
+        // Конструкторы для 1.6
         public Ability_UkakuFire() : base() { }
         public Ability_UkakuFire(Pawn pawn) : base(pawn) { }
         public Ability_UkakuFire(Pawn pawn, AbilityDef def) : base(pawn, def) { }
@@ -18,16 +19,14 @@ namespace TokyoGhoulMod
                 AcceptanceReport report = base.CanCast;
                 if (!report.Accepted) return report;
 
+                // Проверяем наличие хедиффа Укаку
                 if (!pawn.health.hediffSet.HasHediff(HediffDef.Named("Hediff_Ukaku")))
-                {
                     return new AcceptanceReport("Нужно активировать Укаку");
-                }
 
+                // Проверяем запас RC-клеток
                 Gene_RCCells gene = pawn.genes?.GetFirstGeneOfType<Gene_RCCells>();
                 if (gene == null || gene.Value < 0.02f)
-                {
                     return new AcceptanceReport("Недостаточно RC-клеток");
-                }
 
                 return true;
             }
@@ -35,7 +34,7 @@ namespace TokyoGhoulMod
 
         public override bool Activate(LocalTargetInfo target, LocalTargetInfo dest)
         {
-            // Списываем 2% за каждый снаряд из очереди
+            // Списываем RC-клетки за каждый выстрел
             Gene_RCCells gene = pawn.genes?.GetFirstGeneOfType<Gene_RCCells>();
             if (gene != null)
             {
@@ -43,7 +42,6 @@ namespace TokyoGhoulMod
             }
 
             ShootProjectile(target);
-
             return base.Activate(target, dest);
         }
 
@@ -52,20 +50,28 @@ namespace TokyoGhoulMod
             if (pawn.Map == null || !target.IsValid) return;
 
             ThingDef projectileDef = this.def.verbProperties.defaultProjectile;
+            if (projectileDef == null) return;
+
+            // Спавним снаряд
             Projectile projectile = (Projectile)GenSpawn.Spawn(projectileDef, pawn.Position, pawn.Map);
 
-            // Уменьшаем разброс до минимума (0.05 вместо 0.5)
-            // Или вообще удалите эти 3 строки для 100% точности "в точку"
+            // РАБОТА С ВЕКТОРАМИ И ЦЕЛЬЮ
             Vector3 targetVec = target.CenterVector3;
-            targetVec.x += Rand.Range(-0.005f, 0.005f);
-            targetVec.z += Rand.Range(-0.005f, 0.005f);
 
-            LocalTargetInfo spreadTarget = new LocalTargetInfo(targetVec.ToIntVec3());
+            // Добавляем небольшой рандомный разброс
+            targetVec.x += Rand.Range(-0.3f, 0.3f);
+            targetVec.z += Rand.Range(-0.3f, 0.3f);
 
+            // ИСПРАВЛЕНИЕ ОШИБКИ CS1503: 
+            // Создаем LocalTargetInfo из координат клетки (IntVec3), полученных из нашего Vector3
+            LocalTargetInfo finalTarget = new LocalTargetInfo(targetVec.ToIntVec3());
+
+            // Запуск снаряда
+            // Аргументы: launcher, origin, usedTarget, intendedTarget, hitFlags, preventSpecialEffects, equipment
             projectile.Launch(
                 pawn,
                 pawn.DrawPos,
-                spreadTarget,
+                finalTarget,
                 target,
                 ProjectileHitFlags.All,
                 false,

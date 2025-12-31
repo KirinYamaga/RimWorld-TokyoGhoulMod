@@ -60,28 +60,28 @@
   </GeneDef>
 
   <!-- КОКАКУ -->
-  <GeneDef ParentName="KaguneTypeBase">
-    <defName>Gene_Kokaku</defName>
+<GeneDef ParentName="KaguneTypeBase">
+    <defName>Gene_Koukaku</defName>
     <label>Кокаку</label>
-    <abilities><li>Release_Kokaku</li></abilities>
+    <abilities><li>Release_Koukaku</li></abilities>
     <renderNodeProperties>
       <li Class="TokyoGhoulMod.PawnRenderNodeProperties_Kagune">
         <nodeClass>TokyoGhoulMod.PawnRenderNode_Kagune</nodeClass>
         <workerClass>TokyoGhoulMod.PawnRenderNodeWorker_Kagune</workerClass>
-        <kaguneTag>Kokaku</kaguneTag>
-        <texPath>Things/Pawn/Kagune/Kokaku</texPath>
+        <kaguneTag>Koukaku</kaguneTag>
+        <texPath>Things/Pawn/Kagune/Koukaku</texPath>
         <parentTagDef>Body</parentTagDef>
         <graphicClass>Graphic_Multi</graphicClass>
         <drawData>
           <defaultData><layer>-2</layer></defaultData>
           <dataNorth><layer>80</layer></dataNorth>
         </drawData>
-        <baseScale>1.6</baseScale>
+        <baseScale>1.3</baseScale>
       </li>
     </renderNodeProperties>
   </GeneDef>
 
-  <!-- БИКАКУ -->
+  <!-- БИКАКУ (Исправлен слой и тег) -->
   <GeneDef ParentName="KaguneTypeBase">
     <defName>Gene_Bikaku</defName>
     <label>Бикаку</label>
@@ -98,7 +98,7 @@
           <defaultData><layer>-2</layer></defaultData>
           <dataNorth><layer>80</layer></dataNorth>
         </drawData>
-        <baseScale>1.6</baseScale>
+        <baseScale>1.2</baseScale>
       </li>
     </renderNodeProperties>
   </GeneDef>

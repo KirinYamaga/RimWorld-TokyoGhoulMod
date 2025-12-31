@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <!-- ======================== БАЗОВЫЕ ШАБЛОНЫ (Abstract) ======================== -->
+
+  <!-- База для предметов-контейнеров -->
+  <ThingDef Name="TG_KakuhoItemBase" ParentName="BodyPartBase" Abstract="True">
+    <graphicData>
+      <texPath>Things/Item/Health/HealthItem</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <statBases>
+      <MarketValue>800</MarketValue>
+      <Mass>2</Mass>
+    </statBases>
+    <techLevel>Industrial</techLevel>
+    <thingCategories>
+      <li>BodyPartsBionic</li>
+    </thingCategories>
+  </ThingDef>
+
+  <!-- База для вживленных органов -->
+  <HediffDef Name="TG_KakuhoHediffBase" ParentName="ImplantHediffBase" Abstract="True">
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(0.9, 0.4, 0.4)</defaultLabelColor>
+    <isBad>false</isBad>
+    <stages>
+      <li>
+        <severityPerDay>0.1</severityPerDay>
+        <label>адаптация</label>
+        <capMods>
+          <li><capacity>Consciousness</capacity><offset>0.05</offset></li>
+        </capMods>
+      </li>
+      <li>
+        <minSeverity>2.0</minSeverity>
+        <label>активация</label>
+        <statOffsets>
+          <MeleeDamageFactor>0.15</MeleeDamageFactor>
+        </statOffsets>
+      </li>
+    </stages>
+  </HediffDef>
+
+  <!-- База для операций -->
+  <RecipeDef Name="TG_KakuhoRecipeBase" ParentName="SurgeryInstallImplantBase" Abstract="True">
+    <workerClass>TokyoGhoulMod.Recipe_InstallKakuho</workerClass> <!-- НАШ C# КЛАСС -->
+    <appliedOnFixedBodyParts>
+      <li>Spine</li>
+    </appliedOnFixedBodyParts>
+    <jobString>Вживляет какухо.</jobString>
+  </RecipeDef>
+
+  <!-- ======================== РИНКАКУ ======================== -->
+
+  <ThingDef ParentName="TG_KakuhoItemBase">
+    <defName>Kakuho_Rinkaku_Item</defName>
+    <label>какухо (ринкаку)</label>
+    <description>Извлечённое какухо типа ринкаку.</description>
+  </ThingDef>
+
+  <HediffDef ParentName="TG_KakuhoHediffBase">
+    <defName>Hediff_KakuhoRinkaku</defName>
+    <label>какухо ринкаку</label>
+  </HediffDef>
+
+  <RecipeDef ParentName="TG_KakuhoRecipeBase">
+    <defName>InstallKakuhoRinkaku</defName>
+    <label>вживить какухо ринкаку</label>
+    <addsHediff>Hediff_KakuhoRinkaku</addsHediff>
+    <ingredients><li><filter><thingDefs><li>Kakuho_Rinkaku_Item</li></thingDefs></filter><count>1</count></li></ingredients>
+    <fixedIngredientFilter><thingDefs><li>Kakuho_Rinkaku_Item</li></thingDefs></fixedIngredientFilter>
+  </RecipeDef>
+
+  <!-- ======================== УКАКУ ======================== -->
+
+  <ThingDef ParentName="TG_KakuhoItemBase">
+    <defName>Kakuho_Ukaku_Item</defName>
+    <label>какухо (укаку)</label>
+    <description>Извлечённое какухо типа укаку.</description>
+  </ThingDef>
+
+  <HediffDef ParentName="TG_KakuhoHediffBase">
+    <defName>Hediff_KakuhoUkaku</defName>
+    <label>какухо укаку</label>
+  </HediffDef>
+
+  <RecipeDef ParentName="TG_KakuhoRecipeBase">
+    <defName>InstallKakuhoUkaku</defName>
+    <label>вживить какухо укаку</label>
+    <addsHediff>Hediff_KakuhoUkaku</addsHediff>
+    <ingredients><li><filter><thingDefs><li>Kakuho_Ukaku_Item</li></thingDefs></filter><count>1</count></li></ingredients>
+    <fixedIngredientFilter><thingDefs><li>Kakuho_Ukaku_Item</li></thingDefs></fixedIngredientFilter>
+  </RecipeDef>
+
+  <!-- ======================== КОКАКУ ======================== -->
+
+  <ThingDef ParentName="TG_KakuhoItemBase">
+    <defName>Kakuho_Koukaku_Item</defName>
+    <label>какухо (кокаку)</label>
+    <description>Извлечённое какухо типа кокаку.</description>
+  </ThingDef>
+
+  <HediffDef ParentName="TG_KakuhoHediffBase">
+    <defName>Hediff_KakuhoKoukaku</defName>
+    <label>какухо кокаку</label>
+  </HediffDef>
+
+  <RecipeDef ParentName="TG_KakuhoRecipeBase">
+    <defName>InstallKakuhoKoukaku</defName>
+    <label>вживить какухо кокаку</label>
+    <addsHediff>Hediff_KakuhoKoukaku</addsHediff>
+    <ingredients><li><filter><thingDefs><li>Kakuho_Koukaku_Item</li></thingDefs></filter><count>1</count></li></ingredients>
+    <fixedIngredientFilter><thingDefs><li>Kakuho_Koukaku_Item</li></thingDefs></fixedIngredientFilter>
+  </RecipeDef>
+
+  <!-- ======================== БИКАКУ ======================== -->
+
+  <ThingDef ParentName="TG_KakuhoItemBase">
+    <defName>Kakuho_Bikaku_Item</defName>
+    <label>какухо (бикаку)</label>
+    <description>Извлечённое какухо типа бикаку.</description>
+  </ThingDef>
+
+  <HediffDef ParentName="TG_KakuhoHediffBase">
+    <defName>Hediff_KakuhoBikaku</defName>
+    <label>какухо бикаку</label>
+  </HediffDef>
+
+  <RecipeDef ParentName="TG_KakuhoRecipeBase">
+    <defName>InstallKakuhoBikaku</defName>
+    <label>вживить какухо бикаку</label>
+    <addsHediff>Hediff_KakuhoBikaku</addsHediff>
+    <ingredients><li><filter><thingDefs><li>Kakuho_Bikaku_Item</li></thingDefs></filter><count>1</count></li></ingredients>
+    <fixedIngredientFilter><thingDefs><li>Kakuho_Bikaku_Item</li></thingDefs></fixedIngredientFilter>
+  </RecipeDef>
+
+  <!-- ======================== УДАЛЕНИЕ (ОБЩЕЕ) ======================== -->
+
+  <RecipeDef ParentName="SurgeryRemoveImplantBase">
+    <defName>RemoveKakuho</defName>
+    <label>извлечь какухо</label>
+    <description>Хирургическое извлечение какухо.</description>
+    <workerClass>TokyoGhoulMod.Recipe_RemoveKakuho</workerClass> 
+    <jobString>Извлекает какухо.</jobString>
+    <removesHediff>Hediff_KakuhoRinkaku</removesHediff> 
+  </RecipeDef>
+
+</Defs>

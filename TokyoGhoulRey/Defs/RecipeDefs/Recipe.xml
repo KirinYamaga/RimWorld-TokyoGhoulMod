@@ -1,32 +1,109 @@
 <?xml version="1.0" encoding="utf-8" ?>
-
 <Defs>
-  <RecipeDef ParentName="SurgeryInstallImplantBase">
-    <defName>InstallKakuho</defName>
-    <label>вживить какухо</label>
-    <jobString>Вживляет какухо.</jobString>
-    <addsHediff>Kakuho</addsHediff>
+
+  <!-- ======================== АБСТРАКТНАЯ БАЗА ======================== -->
+  
+  <RecipeDef Name="TG_InstallKakuhoBase" ParentName="SurgeryInstallImplantBase" Abstract="True">
+    <workerClass>TokyoGhoulMod.Recipe_InstallKakuho</workerClass> <!-- Ваш C# класс -->
     <appliedOnFixedBodyParts>
       <li>Spine</li>
     </appliedOnFixedBodyParts>
+    <recipeUsers>
+      <li>Human</li>
+    </recipeUsers>
+    <skillRequirements>
+      <Medicine>10</Medicine>
+    </skillRequirements>
+  </RecipeDef>
+
+  <!-- ======================== РЕЦЕПТЫ УСТАНОВКИ ======================== -->
+
+  <!-- УКАКУ -->
+  <RecipeDef ParentName="TG_InstallKakuhoBase">
+    <defName>InstallKakuhoUkaku</defName>
+    <label>вживить какухо укаку</label>
+    <jobString>Вживляет какухо укаку.</jobString>
+    <addsHediff>Hediff_KakuhoUkaku</addsHediff>
     <ingredients>
       <li>
-        <filter><thingDefs><li>Kakuho_Item</li></thingDefs></filter>
+        <filter><thingDefs><li>Kakuho_Ukaku_Item</li></thingDefs></filter>
         <count>1</count>
       </li>
     </ingredients>
     <fixedIngredientFilter>
-      <thingDefs><li>Kakuho_Item</li></thingDefs>
+      <thingDefs><li>Kakuho_Ukaku_Item</li></thingDefs>
     </fixedIngredientFilter>
   </RecipeDef>
 
-  <RecipeDef ParentName="SurgeryRemoveImplantBase">
+  <!-- КОКАКУ -->
+  <RecipeDef ParentName="TG_InstallKakuhoBase">
+    <defName>InstallKakuhoKoukaku</defName>
+    <label>вживить какухо кокаку</label>
+    <jobString>Вживляет какухо кокаку.</jobString>
+    <addsHediff>Hediff_KakuhoKoukaku</addsHediff>
+    <ingredients>
+      <li>
+        <filter><thingDefs><li>Kakuho_Koukaku_Item</li></thingDefs></filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs><li>Kakuho_Koukaku_Item</li></thingDefs>
+    </fixedIngredientFilter>
+  </RecipeDef>
+
+  <!-- РИНКАКУ -->
+  <RecipeDef ParentName="TG_InstallKakuhoBase">
+    <defName>InstallKakuhoRinkaku</defName>
+    <label>вживить какухо ринкаку</label>
+    <jobString>Вживляет какухо ринкаку.</jobString>
+    <addsHediff>Hediff_KakuhoRinkaku</addsHediff>
+    <ingredients>
+      <li>
+        <filter><thingDefs><li>Kakuho_Rinkaku_Item</li></thingDefs></filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs><li>Kakuho_Rinkaku_Item</li></thingDefs>
+    </fixedIngredientFilter>
+  </RecipeDef>
+
+  <!-- БИКАКУ -->
+  <RecipeDef ParentName="TG_InstallKakuhoBase">
+    <defName>InstallKakuhoBikaku</defName>
+    <label>вживить какухо бикаку</label>
+    <jobString>Вживляет какухо бикаку.</jobString>
+    <addsHediff>Hediff_KakuhoBikaku</addsHediff>
+    <ingredients>
+      <li>
+        <filter><thingDefs><li>Kakuho_Bikaku_Item</li></thingDefs></filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs><li>Kakuho_Bikaku_Item</li></thingDefs>
+    </fixedIngredientFilter>
+  </RecipeDef>
+
+  <!-- ======================== РЕЦЕПТЫ УДАЛЕНИЯ ======================== -->
+
+<!-- Универсальный рецепт удаления какухо -->
+  <RecipeDef>
     <defName>RemoveKakuho</defName>
     <label>извлечь какухо</label>
-    <description>Извлечь какухо.</description>
-    <workerClass>Recipe_RemoveHediff</workerClass>
-    <removesHediff>Kakuho</removesHediff>
-    <successfullyRemovedHediffItem>Kakuho_Item</successfullyRemovedHediffItem>
+    <description>Хирургическое извлечение органа какухо. Внимание: пешка потеряет способности гуля.</description>
+    <workerClass>TokyoGhoulMod.Recipe_RemoveKakuho</workerClass> <!-- НАШ КЛАСС -->
     <jobString>Извлекает какухо.</jobString>
+    <workAmount>2500</workAmount>
+    <isViolation>true</isViolation>
+    <targetsBodyPart>true</targetsBodyPart>
+    <recipeUsers>
+      <li>Human</li>
+    </recipeUsers>
+    <skillRequirements>
+      <Medicine>10</Medicine>
+    </skillRequirements>
   </RecipeDef>
+
 </Defs>
