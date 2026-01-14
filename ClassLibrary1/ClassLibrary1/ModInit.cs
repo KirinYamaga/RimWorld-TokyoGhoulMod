@@ -9,13 +9,9 @@ namespace TokyoGhoulMod
     {
         static TokyoGhoul_PostInit()
         {
-            // Создаем экземпляр Harmony с уникальным ID
             var harmony = new Harmony("kirinyamaga.tokyoghoul");
-
-            // Выполняем патчи
-            harmony.PatchAll(Assembly.GetExecutingAssembly());
-
-            Log.Message("[Tokyo Ghoul] Harmony patches applied successfully.");
+            harmony.PatchAll();
+            Log.Message("[Tokyo Ghoul] Мод успешно инициализирован.");
         }
     }
 }

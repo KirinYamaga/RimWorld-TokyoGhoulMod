@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <GeneDef Name="TG_KaguneColorBase" Abstract="True">
+    <displayCategory>TG_Kagune</displayCategory>
+    <exclusionTags><li>KaguneColor</li></exclusionTags>
+    <biostatCpx>1</biostatCpx>
+    <biostatMet>0</biostatMet>
+    <displayOrderInCategory>300</displayOrderInCategory>
+  </GeneDef>
+
+  <GeneDef ParentName="TG_KaguneColorBase">
+    <defName>TG_ColorRed</defName>
+    <label>красное кагуне</label>
+    <renderNodeProperties><li><nodeClass>PawnRenderNode</nodeClass><color>(200, 30, 30)</color></li></renderNodeProperties>
+  </GeneDef>
+
+  <GeneDef ParentName="TG_KaguneColorBase">
+    <defName>TG_ColorPurple</defName>
+    <label>фиолетовое кагуне</label>
+    <renderNodeProperties><li><nodeClass>PawnRenderNode</nodeClass><color>(130, 30, 200)</color></li></renderNodeProperties>
+  </GeneDef>
+
+  <GeneDef ParentName="TG_KaguneColorBase">
+    <defName>TG_ColorBlue</defName>
+    <label>лазурное кагуне</label>
+    <renderNodeProperties><li><nodeClass>PawnRenderNode</nodeClass><color>(30, 100, 220)</color></li></renderNodeProperties>
+  </GeneDef>
+
+  <GeneDef ParentName="TG_KaguneColorBase">
+    <defName>TG_ColorGreen</defName>
+    <label>изумрудное кагуне</label>
+    <renderNodeProperties><li><nodeClass>PawnRenderNode</nodeClass><color>(40, 180, 60)</color></li></renderNodeProperties>
+  </GeneDef>
+
+  <GeneDef ParentName="TG_KaguneColorBase">
+    <defName>TG_ColorYellow</defName>
+    <label>золотистое кагуне</label>
+    <renderNodeProperties><li><nodeClass>PawnRenderNode</nodeClass><color>(230, 190, 20)</color></li></renderNodeProperties>
+  </GeneDef>
+
+  <GeneDef ParentName="TG_KaguneColorBase">
+    <defName>TG_ColorOrange</defName>
+    <label>огненное кагуне</label>
+    <renderNodeProperties><li><nodeClass>PawnRenderNode</nodeClass><color>(255, 110, 20)</color></li></renderNodeProperties>
+  </GeneDef>
+
+  <GeneDef ParentName="TG_KaguneColorBase">
+    <defName>TG_ColorPink</defName>
+    <label>розовое кагуне</label>
+    <renderNodeProperties><li><nodeClass>PawnRenderNode</nodeClass><color>(255, 105, 180)</color></li></renderNodeProperties>
+  </GeneDef>
+
+  <GeneDef ParentName="TG_KaguneColorBase">
+    <defName>TG_ColorWhite</defName>
+    <label>белоснежное кагуне</label>
+    <renderNodeProperties><li><nodeClass>PawnRenderNode</nodeClass><color>(220, 230, 255)</color></li></renderNodeProperties>
+  </GeneDef>
+
+  <GeneDef ParentName="TG_KaguneColorBase">
+    <defName>TG_ColorBlack</defName>
+    <label>угольное кагуне</label>
+    <renderNodeProperties><li><nodeClass>PawnRenderNode</nodeClass><color>(40, 40, 45)</color></li></renderNodeProperties>
+  </GeneDef>
+
+  <GeneDef ParentName="TG_KaguneColorBase">
+    <defName>TG_ColorTeal</defName>
+    <label>бирюзовое кагуне</label>
+    <renderNodeProperties><li><nodeClass>PawnRenderNode</nodeClass><color>(0, 180, 180)</color></li></renderNodeProperties>
+  </GeneDef>
+</Defs>

@@ -4,18 +4,17 @@
   <!-- Базовый шаблон для генов кагуне -->
   <GeneDef Name="KaguneTypeBase" Abstract="True">
     <displayCategory>TG_Kagune</displayCategory>
-    <exclusionTags>
-      <li>KaguneType</li> <!-- Только один тип кагуне одновременно -->
-    </exclusionTags>
+    <!-- Мы убрали exclusionTags, чтобы наш C# мог добавлять 2 гена (Химера) одному ребенку -->
     <biostatCpx>3</biostatCpx>
-    <biostatMet>-2</biostatMet>
+    <biostatMet>0</biostatMet> <!-- Поставили 0, чтобы не блокировать размножение -->
     <displayOrderInCategory>200</displayOrderInCategory>
   </GeneDef>
 
   <!-- УКАКУ -->
-    <GeneDef ParentName="KaguneTypeBase">
+  <GeneDef ParentName="KaguneTypeBase">
     <defName>Gene_Ukaku</defName>
     <label>Укаку</label>
+    <description>Крылоподобное кагуне, специализирующееся на скорости и дальнем бое.</description>
     <abilities>
       <li>Release_Ukaku</li>
       <li>Ukaku_Fire</li>
@@ -27,7 +26,6 @@
         <kaguneTag>Ukaku</kaguneTag>
         <texPath>Things/Pawn/Kagune/Ukaku</texPath>
         <parentTagDef>Body</parentTagDef>
-        <graphicClass>Graphic_Multi</graphicClass>
         <drawData>
           <defaultData><layer>-2</layer></defaultData>
           <dataNorth><layer>80</layer></dataNorth>
@@ -41,6 +39,7 @@
   <GeneDef ParentName="KaguneTypeBase">
     <defName>Gene_Rinkaku</defName>
     <label>Ринкаку</label>
+    <description>Чешуйчатые щупальца с огромной силой удара и регенерацией.</description>
     <abilities><li>Release_Rinkaku</li></abilities>
     <renderNodeProperties>
       <li Class="TokyoGhoulMod.PawnRenderNodeProperties_Kagune">
@@ -49,7 +48,6 @@
         <kaguneTag>Rinkaku</kaguneTag>
         <texPath>Things/Pawn/Kagune/Rinkaku</texPath>
         <parentTagDef>Body</parentTagDef>
-        <graphicClass>Graphic_Multi</graphicClass>
         <drawData>
           <defaultData><layer>-2</layer></defaultData>
           <dataNorth><layer>80</layer></dataNorth>
@@ -60,9 +58,10 @@
   </GeneDef>
 
   <!-- КОКАКУ -->
-<GeneDef ParentName="KaguneTypeBase">
+  <GeneDef ParentName="KaguneTypeBase">
     <defName>Gene_Koukaku</defName>
     <label>Кокаку</label>
+    <description>Тяжелое бронированное кагуне, обеспечивающее отличную защиту.</description>
     <abilities><li>Release_Koukaku</li></abilities>
     <renderNodeProperties>
       <li Class="TokyoGhoulMod.PawnRenderNodeProperties_Kagune">
@@ -71,7 +70,6 @@
         <kaguneTag>Koukaku</kaguneTag>
         <texPath>Things/Pawn/Kagune/Koukaku</texPath>
         <parentTagDef>Body</parentTagDef>
-        <graphicClass>Graphic_Multi</graphicClass>
         <drawData>
           <defaultData><layer>-2</layer></defaultData>
           <dataNorth><layer>80</layer></dataNorth>
@@ -81,10 +79,11 @@
     </renderNodeProperties>
   </GeneDef>
 
-  <!-- БИКАКУ (Исправлен слой и тег) -->
+  <!-- БИКАКУ -->
   <GeneDef ParentName="KaguneTypeBase">
     <defName>Gene_Bikaku</defName>
     <label>Бикаку</label>
+    <description>Хвостатое кагуне, идеально сбалансированное для любых ситуаций.</description>
     <abilities><li>Release_Bikaku</li></abilities>
     <renderNodeProperties>
       <li Class="TokyoGhoulMod.PawnRenderNodeProperties_Kagune">
@@ -93,7 +92,6 @@
         <kaguneTag>Bikaku</kaguneTag>
         <texPath>Things/Pawn/Kagune/Bikaku</texPath>
         <parentTagDef>Body</parentTagDef>
-        <graphicClass>Graphic_Multi</graphicClass>
         <drawData>
           <defaultData><layer>-2</layer></defaultData>
           <dataNorth><layer>80</layer></dataNorth>

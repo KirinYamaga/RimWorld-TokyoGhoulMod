@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <GeneCategoryDef>
+    <defName>TG_Kagune</defName>
+    <label>Кагуне</label>
+    <displayOrder>500</displayOrder> <!-- Порядок появления в списке категорий -->
+  </GeneCategoryDef>
+</Defs>

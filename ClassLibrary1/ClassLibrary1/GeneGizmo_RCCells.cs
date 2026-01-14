@@ -18,7 +18,7 @@ namespace TokyoGhoulMod
 
         protected override string GetTooltip()
         {
-            return "Запас RC-клеток. Необходим для активации кагуне и регенерации.";
+            return "TG_RCCellsDesc".Translate();
         }
     }
 }

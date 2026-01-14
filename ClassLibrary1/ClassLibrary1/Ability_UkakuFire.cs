@@ -6,7 +6,6 @@ namespace TokyoGhoulMod
 {
     public class Ability_UkakuFire : Ability
     {
-        // Конструкторы для 1.6
         public Ability_UkakuFire() : base() { }
         public Ability_UkakuFire(Pawn pawn) : base(pawn) { }
         public Ability_UkakuFire(Pawn pawn, AbilityDef def) : base(pawn, def) { }
@@ -19,14 +18,14 @@ namespace TokyoGhoulMod
                 AcceptanceReport report = base.CanCast;
                 if (!report.Accepted) return report;
 
-                // Проверяем наличие хедиффа Укаку
+                // ИСПРАВЛЕНО: Проверка наличия хедиффа Укаку через ключ локализации
                 if (!pawn.health.hediffSet.HasHediff(HediffDef.Named("Hediff_Ukaku")))
-                    return new AcceptanceReport("Нужно активировать Укаку");
+                    return new AcceptanceReport("TG_NeedUkaku".Translate());
 
-                // Проверяем запас RC-клеток
+                // ИСПРАВЛЕНО: Проверка запаса RC-клеток через ключ локализации
                 Gene_RCCells gene = pawn.genes?.GetFirstGeneOfType<Gene_RCCells>();
                 if (gene == null || gene.Value < 0.02f)
-                    return new AcceptanceReport("Недостаточно RC-клеток");
+                    return new AcceptanceReport("TG_LowRCCells".Translate());
 
                 return true;
             }
@@ -34,7 +33,6 @@ namespace TokyoGhoulMod
 
         public override bool Activate(LocalTargetInfo target, LocalTargetInfo dest)
         {
-            // Списываем RC-клетки за каждый выстрел
             Gene_RCCells gene = pawn.genes?.GetFirstGeneOfType<Gene_RCCells>();
             if (gene != null)
             {
@@ -52,22 +50,14 @@ namespace TokyoGhoulMod
             ThingDef projectileDef = this.def.verbProperties.defaultProjectile;
             if (projectileDef == null) return;
 
-            // Спавним снаряд
             Projectile projectile = (Projectile)GenSpawn.Spawn(projectileDef, pawn.Position, pawn.Map);
-
-            // РАБОТА С ВЕКТОРАМИ И ЦЕЛЬЮ
             Vector3 targetVec = target.CenterVector3;
 
-            // Добавляем небольшой рандомный разброс
             targetVec.x += Rand.Range(-0.3f, 0.3f);
             targetVec.z += Rand.Range(-0.3f, 0.3f);
 
-            // ИСПРАВЛЕНИЕ ОШИБКИ CS1503: 
-            // Создаем LocalTargetInfo из координат клетки (IntVec3), полученных из нашего Vector3
             LocalTargetInfo finalTarget = new LocalTargetInfo(targetVec.ToIntVec3());
 
-            // Запуск снаряда
-            // Аргументы: launcher, origin, usedTarget, intendedTarget, hitFlags, preventSpecialEffects, equipment
             projectile.Launch(
                 pawn,
                 pawn.DrawPos,

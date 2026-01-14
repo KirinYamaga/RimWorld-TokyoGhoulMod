@@ -6,20 +6,31 @@
         <description>Глаз гуля. Зрачок краснеет, а склера становится черной.</description>
         <hediffClass>HediffWithComps</hediffClass>
         <defaultLabelColor>(1, 0.2, 0.2)</defaultLabelColor>
-        <isBad>false</isBad> <stages>
+        <isBad>false</isBad> 
+        <stages>
             <li>
-                <capMods>
-                    <li>
-                        <capacity>Sight</capacity>
-                        <offset>0.25</offset>
-                    </li>
-                </capMods>
+                <capMods><li><capacity>Sight</capacity><offset>0.50</offset></li></capMods>
             </li>
         </stages>
-        <comps>
-            <li Class="HediffCompProperties_SeverityPerDay">
-                <severityPerDay>-24.0</severityPerDay>
-            </li>
-        </comps>
+        <renderNodeProperties>
+			<li Class="TokyoGhoulMod.PawnRenderNodeProperties_Single">
+            <nodeClass>TokyoGhoulMod.PawnRenderNode_Single</nodeClass>
+            <workerClass>TokyoGhoulMod.PawnRenderNodeWorker_Single</workerClass>
+            
+            <texPath>Things/Pawn/Eyes/Kakugan_Male</texPath>
+            <texPathFemale>Things/Pawn/Eyes/Kakugan_Female</texPathFemale>
+            <parentTagDef>Head</parentTagDef>
+            
+            <!-- УМЕНЬШАЕМ В 2 РАЗА -->
+            <baseScale>0.2</baseScale>
+
+            <skipAtRotation><li>North</li></skipAtRotation>
+            <drawData>
+              <defaultData>
+                <layer>54</layer>
+              </defaultData>
+            </drawData>
+          </li>
+        </renderNodeProperties>
     </HediffDef>
 </Defs>

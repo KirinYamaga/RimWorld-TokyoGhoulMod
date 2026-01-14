@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+
+  <!-- Сообщения об активации -->
+  <TG_KaguneReleased>{0}: {1} высвобожден!</TG_KaguneReleased>
+  <TokyoGhoul_KaguneRetracted>{0} втягивает кагуне.</TokyoGhoul_KaguneRetracted>
+  <TokyoGhoul_KaguneRetractedCells>Кагуне {0} самопроизвольно втянулось из-за нехватки RC-клеток!</TokyoGhoul_KaguneRetractedCells>
+
+  <!-- Ошибки применения способностей (AcceptanceReport) -->
+  <TG_MissingKakuho>Отсутствует орган какухо</TG_MissingKakuho>
+  <TG_NeedUkaku>Нужно сначала активировать Укаку</TG_NeedUkaku>
+  <TG_LowRCCells>Недостаточно RC-клеток</TG_LowRCCells>
+
+  <!-- Ресурсы и Гизмо -->
+  <TG_RCCellsLabel>RC-клетки</TG_RCCellsLabel>
+  <TG_RCCellsDesc>Запас RC-клеток. Необходим для активации кагуне, использования способностей и ускоренной регенерации.</TG_RCCellsDesc>
+
+  <!-- События биологии -->
+  <TG_KaguneTypeAwakened>У {0} пробудился тип кагуне: {1}</TG_KaguneTypeAwakened>
+  <TG_GhoulHungerReason>гулий голод</TG_GhoulHungerReason>
+  <TG_GhoulsCantEatNormalFood>Гули не могут переваривать обычную пищу! Их организм отвергает её.</TG_GhoulsCantEatNormalFood>
+  <TG_GhoulCured>{0} больше не является гулем (какухо удалено).</TG_GhoulCured>
+  
+  <!-- Система голода -->
+  <TG_GhoulStarvingToDeath>{0} умирает от RC-истощения! Организм пожирает сам себя.</TG_GhoulStarvingToDeath>
+  <TG_AlertRCStarvationLabel>Критический RC-голод</TG_AlertRCStarvationLabel>
+  <TG_AlertRCStarvationDesc>Следующие гули находятся на грани безумия или смерти от истощения. Им срочно нужна человечина:\n\n{0}</TG_AlertRCStarvationDesc>
+  <TG_KakuhoFoundDuringButchery>При разделке тела {0} удалось извлечь уцелевший орган: {1}.</TG_KakuhoFoundDuringButchery>
+  <TG_HumanAteGhoulMeat>{0} съел мясо гуля! В его крови начался RC-коллапс.</TG_HumanAteGhoulMeat>
+  <TG_KakujaStirring>Внутри {0} что-то меняется... Его какухо пульсирует от поглощенной силы других гулей.</TG_KakujaStirring>
+  <TG_ChimeraBorn>Невероятно! {0} родился Химерой, унаследовав типы кагуне обоих родителей.</TG_ChimeraBorn>
+</LanguageData>

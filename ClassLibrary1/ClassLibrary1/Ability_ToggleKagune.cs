@@ -46,7 +46,8 @@ namespace TokyoGhoulMod
                 {
                     FleckMaker.ThrowMetaIcon(pawn.Position, pawn.Map, FleckDefOf.PsycastAreaEffect);
                 }
-                Messages.Message(pawn.LabelShort + ": " + kaguneHediffDef.label + " высвобожден!", MessageTypeDefOf.PositiveEvent);
+                // ИСПРАВЛЕНО: Использование ключа трансляции с аргументами
+                Messages.Message("TG_KaguneReleased".Translate(pawn.LabelShort, kaguneHediffDef.label), MessageTypeDefOf.PositiveEvent);
             }
 
             if (pawn.meleeVerbs != null) pawn.meleeVerbs.Notify_PawnDespawned();
@@ -79,7 +80,8 @@ namespace TokyoGhoulMod
                 if (!report.Accepted) return report;
 
                 bool hasAnyKakuho = pawn.health.hediffSet.hediffs.Any(h => h.def != null && h.def.defName.Contains("Kakuho"));
-                if (!hasAnyKakuho) return new AcceptanceReport("Отсутствует какухо");
+                // ИСПРАВЛЕНО: Замена текста на ключ
+                if (!hasAnyKakuho) return new AcceptanceReport("TG_MissingKakuho".Translate());
 
                 return true;
             }

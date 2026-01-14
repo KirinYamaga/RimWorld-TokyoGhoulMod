@@ -1,0 +1,325 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{5958758E-12CB-48C2-9319-CAEC7E2B7DB5}|ClassLibrary1\\Mod.csproj|e:\\tokyoghoulrey\\rimworld-tokyoghoulmod\\classlibrary1\\classlibrary1\\geneticshelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5958758E-12CB-48C2-9319-CAEC7E2B7DB5}|ClassLibrary1\\Mod.csproj|solutionrelative:classlibrary1\\geneticshelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5958758E-12CB-48C2-9319-CAEC7E2B7DB5}|ClassLibrary1\\Mod.csproj|E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\classlibrary1\\patch_ingested.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5958758E-12CB-48C2-9319-CAEC7E2B7DB5}|ClassLibrary1\\Mod.csproj|solutionrelative:classlibrary1\\patch_ingested.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5958758E-12CB-48C2-9319-CAEC7E2B7DB5}|ClassLibrary1\\Mod.csproj|e:\\tokyoghoulrey\\rimworld-tokyoghoulmod\\classlibrary1\\classlibrary1\\gene_rccells.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5958758E-12CB-48C2-9319-CAEC7E2B7DB5}|ClassLibrary1\\Mod.csproj|solutionrelative:classlibrary1\\gene_rccells.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5958758E-12CB-48C2-9319-CAEC7E2B7DB5}|ClassLibrary1\\Mod.csproj|e:\\tokyoghoulrey\\rimworld-tokyoghoulmod\\classlibrary1\\classlibrary1\\pawnrendernode_single.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5958758E-12CB-48C2-9319-CAEC7E2B7DB5}|ClassLibrary1\\Mod.csproj|solutionrelative:classlibrary1\\pawnrendernode_single.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5958758E-12CB-48C2-9319-CAEC7E2B7DB5}|ClassLibrary1\\Mod.csproj|E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\classlibrary1\\pawnrendernode_kagune.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5958758E-12CB-48C2-9319-CAEC7E2B7DB5}|ClassLibrary1\\Mod.csproj|solutionrelative:classlibrary1\\pawnrendernode_kagune.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5958758E-12CB-48C2-9319-CAEC7E2B7DB5}|ClassLibrary1\\Mod.csproj|E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\classlibrary1\\genegizmo_rccells.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5958758E-12CB-48C2-9319-CAEC7E2B7DB5}|ClassLibrary1\\Mod.csproj|solutionrelative:classlibrary1\\genegizmo_rccells.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5958758E-12CB-48C2-9319-CAEC7E2B7DB5}|ClassLibrary1\\Mod.csproj|E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\classlibrary1\\ghouldefof.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5958758E-12CB-48C2-9319-CAEC7E2B7DB5}|ClassLibrary1\\Mod.csproj|solutionrelative:classlibrary1\\ghouldefof.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5958758E-12CB-48C2-9319-CAEC7E2B7DB5}|ClassLibrary1\\Mod.csproj|E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\classlibrary1\\isghoul.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5958758E-12CB-48C2-9319-CAEC7E2B7DB5}|ClassLibrary1\\Mod.csproj|solutionrelative:classlibrary1\\isghoul.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5958758E-12CB-48C2-9319-CAEC7E2B7DB5}|ClassLibrary1\\Mod.csproj|E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\classlibrary1\\patch_butcherghoul.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5958758E-12CB-48C2-9319-CAEC7E2B7DB5}|ClassLibrary1\\Mod.csproj|solutionrelative:classlibrary1\\patch_butcherghoul.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5958758E-12CB-48C2-9319-CAEC7E2B7DB5}|ClassLibrary1\\Mod.csproj|E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\classlibrary1\\thoughtworker_rcstarvation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5958758E-12CB-48C2-9319-CAEC7E2B7DB5}|ClassLibrary1\\Mod.csproj|solutionrelative:classlibrary1\\thoughtworker_rcstarvation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5958758E-12CB-48C2-9319-CAEC7E2B7DB5}|ClassLibrary1\\Mod.csproj|E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\classlibrary1\\recipe_kakuhosurgery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5958758E-12CB-48C2-9319-CAEC7E2B7DB5}|ClassLibrary1\\Mod.csproj|solutionrelative:classlibrary1\\recipe_kakuhosurgery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5958758E-12CB-48C2-9319-CAEC7E2B7DB5}|ClassLibrary1\\Mod.csproj|E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\classlibrary1\\modinit.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5958758E-12CB-48C2-9319-CAEC7E2B7DB5}|ClassLibrary1\\Mod.csproj|solutionrelative:classlibrary1\\modinit.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5958758E-12CB-48C2-9319-CAEC7E2B7DB5}|ClassLibrary1\\Mod.csproj|E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\classlibrary1\\alert_rcstarvation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5958758E-12CB-48C2-9319-CAEC7E2B7DB5}|ClassLibrary1\\Mod.csproj|solutionrelative:classlibrary1\\alert_rcstarvation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5958758E-12CB-48C2-9319-CAEC7E2B7DB5}|ClassLibrary1\\Mod.csproj|E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\classlibrary1\\ability_togglekagune.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5958758E-12CB-48C2-9319-CAEC7E2B7DB5}|ClassLibrary1\\Mod.csproj|solutionrelative:classlibrary1\\ability_togglekagune.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5958758E-12CB-48C2-9319-CAEC7E2B7DB5}|ClassLibrary1\\Mod.csproj|E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\classlibrary1\\ability_ukakufire.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5958758E-12CB-48C2-9319-CAEC7E2B7DB5}|ClassLibrary1\\Mod.csproj|solutionrelative:classlibrary1\\ability_ukakufire.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{00000000-0000-0000-0000-000000000000}|\u003CSolution\u003E|Mod||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|E:\\Project\\RimModGhoul\\TokyoGhoulMod_Project\\ClassLibrary1\\ClassLibrary1\\Hediff_Kagune.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|E:\\Project\\RimModGhoul\\TokyoGhoulMod_Project\\ClassLibrary1\\ClassLibrary1\\Ability_UkakuShot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|E:\\Project\\RimModGhoul\\TokyoGhoulMod_Project\\ClassLibrary1\\ClassLibrary1\\HediffComp_KakuhoGeneBinder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "Mod",
+              "DocumentMoniker": "E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\ClassLibrary1\\Mod.csproj",
+              "RelativeDocumentMoniker": "ClassLibrary1\\Mod.csproj",
+              "ToolTip": "E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\ClassLibrary1\\Mod.csproj",
+              "RelativeToolTip": "ClassLibrary1\\Mod.csproj",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-12-29T18:53:22.971Z",
+              "IsPinned": true
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "PawnRenderNode_Single.cs",
+              "DocumentMoniker": "E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\ClassLibrary1\\PawnRenderNode_Single.cs",
+              "RelativeDocumentMoniker": "ClassLibrary1\\PawnRenderNode_Single.cs",
+              "ToolTip": "E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\ClassLibrary1\\PawnRenderNode_Single.cs",
+              "RelativeToolTip": "ClassLibrary1\\PawnRenderNode_Single.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAC4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-14T13:38:50.117Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "GeneticsHelper.cs",
+              "DocumentMoniker": "E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\ClassLibrary1\\GeneticsHelper.cs",
+              "RelativeDocumentMoniker": "ClassLibrary1\\GeneticsHelper.cs",
+              "ToolTip": "E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\ClassLibrary1\\GeneticsHelper.cs",
+              "RelativeToolTip": "ClassLibrary1\\GeneticsHelper.cs",
+              "ViewState": "AgIAAHwAAAAAAAAAAAAAAI0AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-14T13:16:08.306Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Patch_ButcherGhoul.cs",
+              "DocumentMoniker": "E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\ClassLibrary1\\Patch_ButcherGhoul.cs",
+              "RelativeDocumentMoniker": "ClassLibrary1\\Patch_ButcherGhoul.cs",
+              "ToolTip": "E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\ClassLibrary1\\Patch_ButcherGhoul.cs",
+              "RelativeToolTip": "ClassLibrary1\\Patch_ButcherGhoul.cs",
+              "ViewState": "AgIAABsAAAAAAAAAAAAgwDEAAABLAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-13T16:24:24.452Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "PawnRenderNode_Kagune.cs",
+              "DocumentMoniker": "E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\ClassLibrary1\\PawnRenderNode_Kagune.cs",
+              "RelativeDocumentMoniker": "ClassLibrary1\\PawnRenderNode_Kagune.cs",
+              "ToolTip": "E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\ClassLibrary1\\PawnRenderNode_Kagune.cs",
+              "RelativeToolTip": "ClassLibrary1\\PawnRenderNode_Kagune.cs",
+              "ViewState": "AgIAACkAAAAAAAAAAAAuwEUAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-13T11:05:31.906Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Recipe_KakuhoSurgery.cs",
+              "DocumentMoniker": "E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\ClassLibrary1\\Recipe_KakuhoSurgery.cs",
+              "RelativeDocumentMoniker": "ClassLibrary1\\Recipe_KakuhoSurgery.cs",
+              "ToolTip": "E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\ClassLibrary1\\Recipe_KakuhoSurgery.cs",
+              "RelativeToolTip": "ClassLibrary1\\Recipe_KakuhoSurgery.cs",
+              "ViewState": "AgIAADcAAAAAAAAAAAAUwFsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-13T11:05:31.902Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "Ability_ToggleKagune.cs",
+              "DocumentMoniker": "E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\ClassLibrary1\\Ability_ToggleKagune.cs",
+              "RelativeDocumentMoniker": "ClassLibrary1\\Ability_ToggleKagune.cs",
+              "ToolTip": "E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\ClassLibrary1\\Ability_ToggleKagune.cs",
+              "RelativeToolTip": "ClassLibrary1\\Ability_ToggleKagune.cs",
+              "ViewState": "AgIAAEEAAAAAAAAAAAAwwFkAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-13T11:05:31.786Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Gene_RCCells.cs",
+              "DocumentMoniker": "E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\ClassLibrary1\\Gene_RCCells.cs",
+              "RelativeDocumentMoniker": "ClassLibrary1\\Gene_RCCells.cs",
+              "ToolTip": "E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\ClassLibrary1\\Gene_RCCells.cs",
+              "RelativeToolTip": "ClassLibrary1\\Gene_RCCells.cs",
+              "ViewState": "AgIAALoAAAAAAAAAAAAcwMcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-13T11:05:31.902Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Patch_Ingested.cs",
+              "DocumentMoniker": "E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\ClassLibrary1\\Patch_Ingested.cs",
+              "RelativeDocumentMoniker": "ClassLibrary1\\Patch_Ingested.cs",
+              "ToolTip": "E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\ClassLibrary1\\Patch_Ingested.cs",
+              "RelativeToolTip": "ClassLibrary1\\Patch_Ingested.cs",
+              "ViewState": "AgIAAFQAAAAAAAAAAAAUwGMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-13T11:05:31.905Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "ThoughtWorker_RCStarvation.cs",
+              "DocumentMoniker": "E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\ClassLibrary1\\ThoughtWorker_RCStarvation.cs",
+              "RelativeDocumentMoniker": "ClassLibrary1\\ThoughtWorker_RCStarvation.cs",
+              "ToolTip": "E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\ClassLibrary1\\ThoughtWorker_RCStarvation.cs",
+              "RelativeToolTip": "ClassLibrary1\\ThoughtWorker_RCStarvation.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-13T13:25:55.41Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "GeneGizmo_RCCells.cs",
+              "DocumentMoniker": "E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\ClassLibrary1\\GeneGizmo_RCCells.cs",
+              "RelativeDocumentMoniker": "ClassLibrary1\\GeneGizmo_RCCells.cs",
+              "ToolTip": "E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\ClassLibrary1\\GeneGizmo_RCCells.cs",
+              "RelativeToolTip": "ClassLibrary1\\GeneGizmo_RCCells.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-13T11:05:31.9Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Alert_RCStarvation.cs",
+              "DocumentMoniker": "E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\ClassLibrary1\\Alert_RCStarvation.cs",
+              "RelativeDocumentMoniker": "ClassLibrary1\\Alert_RCStarvation.cs",
+              "ToolTip": "E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\ClassLibrary1\\Alert_RCStarvation.cs",
+              "RelativeToolTip": "ClassLibrary1\\Alert_RCStarvation.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-13T13:26:13.32Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "Ability_UkakuFire.cs",
+              "DocumentMoniker": "E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\ClassLibrary1\\Ability_UkakuFire.cs",
+              "RelativeDocumentMoniker": "ClassLibrary1\\Ability_UkakuFire.cs",
+              "ToolTip": "E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\ClassLibrary1\\Ability_UkakuFire.cs",
+              "RelativeToolTip": "ClassLibrary1\\Ability_UkakuFire.cs",
+              "ViewState": "AgIAACIAAAAAAAAAAAAgwCgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-13T11:05:31.901Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "ModInit.cs",
+              "DocumentMoniker": "E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\ClassLibrary1\\ModInit.cs",
+              "RelativeDocumentMoniker": "ClassLibrary1\\ModInit.cs",
+              "ToolTip": "E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\ClassLibrary1\\ModInit.cs",
+              "RelativeToolTip": "ClassLibrary1\\ModInit.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-13T11:05:31.904Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "IsGhoul.cs",
+              "DocumentMoniker": "E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\ClassLibrary1\\IsGhoul.cs",
+              "RelativeDocumentMoniker": "ClassLibrary1\\IsGhoul.cs",
+              "ToolTip": "E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\ClassLibrary1\\IsGhoul.cs",
+              "RelativeToolTip": "ClassLibrary1\\IsGhoul.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-13T11:05:31.904Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "GhoulDefOf.cs",
+              "DocumentMoniker": "E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\ClassLibrary1\\GhoulDefOf.cs",
+              "RelativeDocumentMoniker": "ClassLibrary1\\GhoulDefOf.cs",
+              "ToolTip": "E:\\TokyoGhoulRey\\RimWorld-TokyoGhoulMod\\ClassLibrary1\\ClassLibrary1\\GhoulDefOf.cs",
+              "RelativeToolTip": "ClassLibrary1\\GhoulDefOf.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-13T11:05:31.903Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "Hediff_Kagune.cs",
+              "DocumentMoniker": "E:\\Project\\RimModGhoul\\TokyoGhoulMod_Project\\ClassLibrary1\\ClassLibrary1\\Hediff_Kagune.cs",
+              "RelativeDocumentMoniker": "..\\..\\..\\Project\\RimModGhoul\\TokyoGhoulMod_Project\\ClassLibrary1\\ClassLibrary1\\Hediff_Kagune.cs",
+              "ToolTip": "E:\\Project\\RimModGhoul\\TokyoGhoulMod_Project\\ClassLibrary1\\ClassLibrary1\\Hediff_Kagune.cs",
+              "RelativeToolTip": "..\\..\\..\\Project\\RimModGhoul\\TokyoGhoulMod_Project\\ClassLibrary1\\ClassLibrary1\\Hediff_Kagune.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAEwAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-29T18:53:22.964Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "Ability_UkakuShot.cs",
+              "DocumentMoniker": "E:\\Project\\RimModGhoul\\TokyoGhoulMod_Project\\ClassLibrary1\\ClassLibrary1\\Ability_UkakuShot.cs",
+              "RelativeDocumentMoniker": "..\\..\\..\\Project\\RimModGhoul\\TokyoGhoulMod_Project\\ClassLibrary1\\ClassLibrary1\\Ability_UkakuShot.cs",
+              "ToolTip": "E:\\Project\\RimModGhoul\\TokyoGhoulMod_Project\\ClassLibrary1\\ClassLibrary1\\Ability_UkakuShot.cs",
+              "RelativeToolTip": "..\\..\\..\\Project\\RimModGhoul\\TokyoGhoulMod_Project\\ClassLibrary1\\ClassLibrary1\\Ability_UkakuShot.cs",
+              "ViewState": "AQIAABcAAAAAAAAAAADwvysAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-29T18:53:22.967Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "HediffComp_KakuhoGeneBinder.cs",
+              "DocumentMoniker": "E:\\Project\\RimModGhoul\\TokyoGhoulMod_Project\\ClassLibrary1\\ClassLibrary1\\HediffComp_KakuhoGeneBinder.cs",
+              "RelativeDocumentMoniker": "..\\..\\..\\Project\\RimModGhoul\\TokyoGhoulMod_Project\\ClassLibrary1\\ClassLibrary1\\HediffComp_KakuhoGeneBinder.cs",
+              "ToolTip": "E:\\Project\\RimModGhoul\\TokyoGhoulMod_Project\\ClassLibrary1\\ClassLibrary1\\HediffComp_KakuhoGeneBinder.cs",
+              "RelativeToolTip": "..\\..\\..\\Project\\RimModGhoul\\TokyoGhoulMod_Project\\ClassLibrary1\\ClassLibrary1\\HediffComp_KakuhoGeneBinder.cs",
+              "ViewState": "AQIAAA0AAAAAAAAAAAAnwBIAAABDAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-29T18:53:22.969Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

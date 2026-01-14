@@ -2,101 +2,99 @@
 using RimWorld;
 using Verse;
 using Verse.AI;
+using System.Linq;
 
 namespace TokyoGhoulMod
 {
     [HarmonyPatch(typeof(Thing), "Ingested")]
     public static class Patch_Ingested
     {
-        // В Префиксе мы только подменяем число питательности на 0
         [HarmonyPrefix]
         public static bool Prefix(Thing __instance, Pawn ingester, ref float __result)
         {
             if (ingester?.genes == null) return true;
-
-            Gene_RCCells gene = ingester.genes.GetFirstGeneOfType<Gene_RCCells>();
-            if (gene == null) return true;
-
-            // Если это обычная еда (не человечина)
-            if (!IsHumanlikeMeat(__instance) && IsNormalFood(__instance))
+            if (ingester.genes.GetFirstGeneOfType<Gene_RCCells>() != null)
             {
-                // Принудительно ставим результат в 0, чтобы шкала голода не росла
-                __result = 0f;
+                __result = 0f; // Гули живут на RC-клетках
             }
-
             return true;
         }
 
-        // В Постфиксе мы начисляем RC-клетки ИЛИ вызываем рвоту
         [HarmonyPostfix]
         public static void Postfix(Thing __instance, Pawn ingester, ref float __result)
         {
-            if (ingester?.genes == null) return;
-            Gene_RCCells gene = ingester.genes.GetFirstGeneOfType<Gene_RCCells>();
-            if (gene == null) return;
+            if (ingester == null || __instance == null) return;
 
-            if (IsHumanlikeMeat(__instance))
+            Gene_RCCells gene = ingester.genes?.GetFirstGeneOfType<Gene_RCCells>();
+            float nutrition = __instance.GetStatValue(StatDefOf.Nutrition);
+
+            // Человек ест гуля
+            if (gene == null)
             {
-                float nutritionValue = __instance.def.ingestible?.CachedNutrition ?? 0.1f;
-                // Начисляем RC-клетки: 1 единица питания = 0.5 шкалы RC
-                gene.Value += nutritionValue * 0.5f;
+                if (IsGhoulMatter(__instance)) ApplyRCSyndrome(ingester);
+                return;
+            }
+
+            // Гуль ест
+            if (IsGhoulMatter(__instance))
+            {
+                gene.ConsumeGhoulMatter(nutrition);
+                HediffDef highDef = DefDatabase<HediffDef>.GetNamed("TG_GhoulCannibalHigh", false);
+                if (highDef != null) ingester.health.AddHediff(highDef);
+            }
+            else if (IsHumanlikeMeat(__instance))
+            {
+                gene.Value += nutrition * 0.5f;
             }
             else if (IsNormalFood(__instance))
             {
-                // Вместо мгновенного прерывания джоба, добавляем хедифф отравления
-                // Рвота произойдет сама из-за FoodPoisoning или через HediffComp_Vomit
-                ingester.health.AddHediff(HediffDefOf.FoodPoisoning, null, null);
-
-                // Сбрасываем уровень еды обратно (наказание за обычную еду)
-                if (ingester.needs.food != null)
-                {
-                    ingester.needs.food.CurLevel -= __result; // Отнимаем то, что он только что съел
-                }
-                __result = 0f;
-
-                Messages.Message("TokyoGhoul_GhoulsCantEatNormalFood".Translate(), ingester, MessageTypeDefOf.NegativeEvent);
+                ApplyGhoulishRejection(ingester, nutrition);
             }
+        }
+
+        private static bool IsGhoulMatter(Thing food)
+        {
+            if (food.def.defName == "Meat_Ghoul") return true;
+            if (food is Corpse corpse && corpse.InnerPawn != null)
+                return corpse.InnerPawn.genes?.GetFirstGeneOfType<Gene_RCCells>() != null;
+
+            CompIngredients ingredients = food.TryGetComp<CompIngredients>();
+            return ingredients != null && ingredients.ingredients.Any(d => d.defName == "Meat_Ghoul");
         }
 
         private static bool IsHumanlikeMeat(Thing food)
         {
-            // Проверка на уничтоженный объект (безопасность)
-            if (food == null) return false;
-
             if (food.def == ThingDefOf.Meat_Human) return true;
-            if (food is Corpse corpse && corpse.InnerPawn.RaceProps.Humanlike) return true;
+            if (food is Corpse corpse && corpse.InnerPawn != null)
+                return corpse.InnerPawn.RaceProps.Humanlike;
 
             CompIngredients ingredients = food.TryGetComp<CompIngredients>();
-            if (ingredients != null)
-            {
-                return ingredients.ingredients.Contains(ThingDefOf.Meat_Human);
-            }
-            return false;
+            return ingredients != null && ingredients.ingredients.Contains(ThingDefOf.Meat_Human);
         }
 
         private static bool IsNormalFood(Thing food)
         {
             if (food?.def?.ingestible == null) return false;
-            FoodTypeFlags flags = food.def.ingestible.foodType;
-
-            return flags.HasFlag(FoodTypeFlags.VegetableOrFruit) ||
-                   flags.HasFlag(FoodTypeFlags.Meat) ||
-                   flags.HasFlag(FoodTypeFlags.AnimalProduct) ||
-                   flags.HasFlag(FoodTypeFlags.Meal) ||
-                   flags.HasFlag(FoodTypeFlags.Processed) ||
-                   flags.HasFlag(FoodTypeFlags.Liquor) ||
-                   flags.HasFlag(FoodTypeFlags.Fungus);
+            return !IsGhoulMatter(food) && !IsHumanlikeMeat(food);
         }
 
-        private static void ApplyGhoulishRejection(Pawn pawn)
+        private static void ApplyRCSyndrome(Pawn pawn)
         {
-            // Просто добавляем работу рвоты в очередь или запускаем её.
-            // На этом этапе предмет уже "съеден" и удален, ошибки не будет.
-            Job vomitJob = JobMaker.MakeJob(JobDefOf.Vomit);
-            pawn.jobs.StartJob(vomitJob, JobCondition.InterruptForced, null, true);
+            HediffDef syndromeDef = DefDatabase<HediffDef>.GetNamed("TG_RCSyndrome", false);
+            if (syndromeDef != null)
+            {
+                Hediff existing = pawn.health.hediffSet.GetFirstHediffOfDef(syndromeDef);
+                if (existing != null) existing.Severity += 0.20f;
+                else pawn.health.AddHediff(syndromeDef).Severity = 0.20f;
+            }
+            Messages.Message("TG_HumanAteGhoulMeat".Translate(pawn.LabelShort), pawn, MessageTypeDefOf.NegativeHealthEvent);
+        }
 
-            pawn.health.AddHediff(HediffDefOf.FoodPoisoning, null, null);
-            Messages.Message("Гули не могут переваривать обычную пищу!", pawn, MessageTypeDefOf.NegativeEvent);
+        private static void ApplyGhoulishRejection(Pawn pawn, float nutrition)
+        {
+            pawn.health.AddHediff(HediffDefOf.FoodPoisoning);
+            if (pawn.needs.food != null) pawn.needs.food.CurLevel -= nutrition;
+            Messages.Message("TokyoGhoul_GhoulsCantEatNormalFood".Translate(), pawn, MessageTypeDefOf.NegativeEvent);
         }
     }
 }

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <HediffDef>
+    <defName>TG_GhoulCannibalHigh</defName>
+    <label>каннибальское насыщение</label>
+    <description>Гуль потребил плоть себе подобного. Огромный приток RC-клеток вызывает временный прилив ярости и силы.</description>
+    <isBad>false</isBad>
+    <stages>
+      <li>
+        <statOffsets>
+          <li><stat>MeleeDamageFactor</stat><offset>0.20</offset></li>
+          <li><stat>MoveSpeed</stat><offset>0.20</offset></li>
+        </statOffsets>
+      </li>
+    </stages>
+    <comps>
+      <li Class="HediffCompProperties_Disappear">
+        <disappearAfterTicks>15000~30000</disappearAfterTicks> <!-- Около половины дня -->
+      </li>
+    </comps>
+  </HediffDef>
+</Defs>

@@ -3,8 +3,9 @@
 	<XenotypeDef>
 		<defName>TG_Ghoul</defName>
 		<label>Гуль</label>
-		<description>Сверхчеловек-хищник.</description>
+		<description>Сверхчеловек-хищник. Все способности гуля заложены на генетическом уровне и передаются потомству.</description>
 		<iconPath>UI/Icons/Xenotypes/Sanguophage</iconPath>
+		<inheritable>true</inheritable>
 		<genes>
 			<li>Gene_RCCells</li>
 			

@@ -12,3 +12,9 @@ E:\Project\RimModGhoul\TokyoGhoulMod_Project\ClassLibrary1\ClassLibrary1\obj\Deb
 E:\Project\RimModGhoul\TokyoGhoulMod_Project\ClassLibrary1\ClassLibrary1\obj\Debug\Mod.csproj.CoreCompileInputs.cache
 E:\Project\RimModGhoul\TokyoGhoulMod_Project\ClassLibrary1\ClassLibrary1\obj\Debug\ClassLibrary1.dll
 E:\Project\RimModGhoul\TokyoGhoulMod_Project\ClassLibrary1\ClassLibrary1\obj\Debug\ClassLibrary1.pdb
+E:\TokyoGhoulRey\RimWorld-TokyoGhoulMod\TokyoGhoulRey\Assemblies\TokyoGhoulMod.dll
+E:\TokyoGhoulRey\RimWorld-TokyoGhoulMod\TokyoGhoulRey\Assemblies\TokyoGhoulMod.pdb
+E:\TokyoGhoulRey\RimWorld-TokyoGhoulMod\ClassLibrary1\ClassLibrary1\obj\Debug\Mod.csproj.AssemblyReference.cache
+E:\TokyoGhoulRey\RimWorld-TokyoGhoulMod\ClassLibrary1\ClassLibrary1\obj\Debug\Mod.csproj.CoreCompileInputs.cache
+E:\TokyoGhoulRey\RimWorld-TokyoGhoulMod\ClassLibrary1\ClassLibrary1\obj\Debug\TokyoGhoulMod.dll
+E:\TokyoGhoulRey\RimWorld-TokyoGhoulMod\ClassLibrary1\ClassLibrary1\obj\Debug\TokyoGhoulMod.pdb

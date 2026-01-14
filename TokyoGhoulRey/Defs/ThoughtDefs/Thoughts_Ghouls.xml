@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <ThoughtDef>
+    <defName>TG_RCStarvationMood</defName>
+    <workerClass>TokyoGhoulMod.ThoughtWorker_RCStarvation</workerClass>
+    <validWhileDespawned>true</validWhileDespawned>
+    <stages>
+      <li>
+        <label>голод гуля (начальный)</label>
+        <description>Живот сводит. Обычная еда кажется пеплом. Мне нужно что-то... другое.</description>
+        <baseMoodEffect>-5</baseMoodEffect>
+      </li>
+      <li>
+        <label>голод гуля (сильный)</label>
+        <description>Запах людей вокруг становится таким притягательным... Трудно сохранять ясность ума.</description>
+        <baseMoodEffect>-12</baseMoodEffect>
+      </li>
+      <li>
+        <label>голод гуля (критический)</label>
+        <description>ПЛОТЬ. ПЛОТЬ. ПЛОТЬ. Я СЛЫШУ, КАК БЬЮТСЯ ИХ СЕРДЦА. Я БОЛЬШЕ НЕ МОГУ ЭТО ТЕРПЕТЬ!</description>
+        <baseMoodEffect>-25</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+</Defs>

@@ -22,13 +22,17 @@
       <packageId>Ludeon.RimWorld.Anomaly</packageId>
       <displayName>Anomaly</displayName>
     </li>
+	<li>
+      <packageId>Ludeon.RimWorld.Ideology</packageId>
+      <displayName>Ideology</displayName>
+    </li>
   </modDependencies>
   <loadAfter>
     <li>brrainz.harmony</li>
     <li>Ludeon.RimWorld</li>
+	<li>Ludeon.RimWorld.Ideology</li>
 	<li>Ludeon.RimWorld.Biotech</li>
     <li>Ludeon.RimWorld.Anomaly</li>
     <li>Ludeon.RimWorld.Royalty</li>
-    <li>Ludeon.RimWorld.Ideology</li>
   </loadAfter>
 </ModMetaData>

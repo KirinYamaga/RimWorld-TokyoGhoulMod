@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
+  <!-- 1. Сначала определяем сам ТИП ресурса -->
   <GeneResourceDef>
     <defName>RCCells</defName>
     <label>RC-клетки</label>
@@ -7,21 +8,22 @@
     <showInHealthTab>true</showInHealthTab>
   </GeneResourceDef>
 
+  <!-- 2. Затем ген, который его использует -->
   <GeneDef>
     <defName>Gene_RCCells</defName>
     <label>Биология гуля</label>
-    <description>Особая биология гуля...</description>
+    <description>Особая биология гуля, позволяющая накапливать и использовать RC-клетки.</description>
     <geneClass>TokyoGhoulMod.Gene_RCCells</geneClass>
     <resourceDef>RCCells</resourceDef> 
     <resourceGizmoType>TokyoGhoulMod.GeneGizmo_RCCells</resourceGizmoType>
     <resourceGizmoThresholds>
       <li>0.2</li><li>0.5</li><li>0.8</li>
     </resourceGizmoThresholds>
-    <biostatMet>2</biostatMet> 
-    <biostatCpx>3</biostatCpx>
+    <biostatMet>8</biostatMet> 
+    <biostatCpx>5</biostatCpx>
     <displayOrderInCategory>100</displayOrderInCategory>
     <statFactors>
-      <HungerRateMultiplier>0.1</HungerRateMultiplier>
+      <HungerRateFactor>0.1</HungerRateFactor> <!-- ИСПРАВЛЕНО НАЗВАНИЕ -->
     </statFactors>
   </GeneDef>
 </Defs>

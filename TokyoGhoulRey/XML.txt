@@ -1,0 +1,937 @@
+/TokyoGhoulRey/About/About.xml
+========================================
+<?xml version="1.0" encoding="utf-8"?>
+<ModMetaData>
+  <packageId>kirinyamaga.tokyoghoul</packageId>
+  <name>Tokyo Ghoul: Rey</name>
+  <author>KirinYamaga</author>
+  <supportedVersions>
+    <li>1.6</li>
+  </supportedVersions>
+  <description>Мод добавляет механику гулей из вселенной Tokyo Ghoul, включая Какухо и RC-клетки.</description>
+  <modDependencies>
+    <li>
+      <packageId>brrainz.harmony</packageId>
+      <displayName>Harmony</displayName>
+      <steamWorkshopUrl>steam://url/CommunityFilePage/2009463077</steamWorkshopUrl>
+      <downloadUrl>https://github.com/pardeike/HarmonyRimWorld/releases/</downloadUrl>
+    </li>
+    <li>
+      <packageId>Ludeon.RimWorld.Biotech</packageId>
+      <displayName>Biotech</displayName>
+    </li>
+	<li>
+      <packageId>Ludeon.RimWorld.Anomaly</packageId>
+      <displayName>Anomaly</displayName>
+    </li>
+	<li>
+      <packageId>Ludeon.RimWorld.Ideology</packageId>
+      <displayName>Ideology</displayName>
+    </li>
+  </modDependencies>
+  <loadAfter>
+    <li>brrainz.harmony</li>
+    <li>Ludeon.RimWorld</li>
+	<li>Ludeon.RimWorld.Ideology</li>
+	<li>Ludeon.RimWorld.Biotech</li>
+    <li>Ludeon.RimWorld.Anomaly</li>
+    <li>Ludeon.RimWorld.Royalty</li>
+  </loadAfter>
+</ModMetaData>
+
+/TokyoGhoulRey/Defs/AbilityDefs/Abilities_Kagune.xml
+========================================
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <AbilityDef Name="ReleaseKaguneBase" Abstract="True">
+    <abilityClass>TokyoGhoulMod.Ability_ToggleKagune</abilityClass>
+    <targetRequired>False</targetRequired>
+    <displayGizmoWhileUndrafted>True</displayGizmoWhileUndrafted>
+    <cooldownTicksRange>120</cooldownTicksRange>
+    <hostile>false</hostile>
+    <verbProperties>
+      <verbClass>Verb_CastAbility</verbClass>
+      <drawAimPie>False</drawAimPie>
+      <targetParams>
+        <canTargetSelf>True</canTargetSelf>
+      </targetParams>
+    </verbProperties>
+  </AbilityDef>
+
+  <!-- Переименованы defName, чтобы не конфликтовать с хедиффами -->
+  <AbilityDef ParentName="ReleaseKaguneBase">
+    <defName>Release_Ukaku</defName>
+    <label>Выпустить Укаку</label>
+    <description>Активирует или втягивает Укаку.</description>
+    <iconPath>UI/Abilities/Ukaku_Toggle</iconPath>
+  </AbilityDef>
+
+  <AbilityDef ParentName="ReleaseKaguneBase">
+    <defName>Release_Koukaku</defName>
+    <label>Выпустить Кокаку</label>
+    <description>Активирует или втягивает Кокаку.</description>
+    <iconPath>UI/Abilities/Koukaku_Toggle</iconPath>
+  </AbilityDef>
+
+  <AbilityDef ParentName="ReleaseKaguneBase">
+    <defName>Release_Rinkaku</defName>
+    <label>Выпустить Ринкаку</label>
+    <description>Активирует или втягивает Ринкаку.</description>
+    <iconPath>UI/Abilities/Rinkaku_Toggle</iconPath>
+  </AbilityDef>
+
+  <AbilityDef ParentName="ReleaseKaguneBase">
+    <defName>Release_Bikaku</defName>
+    <label>Выпустить Бикаку</label>
+    <description>Активирует или втягивает Бикаку.</description>
+    <iconPath>UI/Abilities/Bikaku_Toggle</iconPath>
+  </AbilityDef>
+
+  <AbilityDef>
+    <defName>Ukaku_Fire</defName>
+    <label>Залп кристаллами</label>
+    <description>Выстреливает очередью острых RC-кристаллов. Требует активного Укаку.</description>
+    <abilityClass>TokyoGhoulMod.Ability_UkakuFire</abilityClass>
+    <iconPath>UI/Abilities/Ukaku_Fire</iconPath>
+    <displayGizmoWhileUndrafted>False</displayGizmoWhileUndrafted>
+    <cooldownTicksRange>180</cooldownTicksRange>
+    <verbProperties>
+      <verbClass>Verb_CastAbility</verbClass> <!-- Это вызывает метод Activate в C# -->
+      <range>24.9</range>
+      <warmupTime>0.6</warmupTime>
+      <burstShotCount>3</burstShotCount>
+      <ticksBetweenBurstShots>6</ticksBetweenBurstShots>
+      <soundCast>Shot_BoltAction</soundCast>
+      <muzzleFlashScale>0</muzzleFlashScale>
+      <defaultProjectile>RC_Shard</defaultProjectile>
+      <targetParams>
+        <canTargetPawns>True</canTargetPawns>
+        <canTargetLocations>True</canTargetLocations>
+      </targetParams>
+    </verbProperties>
+  </AbilityDef>
+
+</Defs>
+
+/TokyoGhoulRey/Defs/AlertDefs/Alerts.xml
+========================================
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <AlertDef>
+    <defName>TG_Alert_RCStarvation</defName>
+    <alertClass>TokyoGhoulMod.Alert_RCStarvation</alertClass>
+  </AlertDef>
+</Defs>
+
+/TokyoGhoulRey/Defs/GeneDefs/GeneCategories.xml
+========================================
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <GeneCategoryDef>
+    <defName>TG_Kagune</defName>
+    <label>Кагуне</label>
+    <displayOrder>500</displayOrder> <!-- Порядок появления в списке категорий -->
+  </GeneCategoryDef>
+</Defs>
+
+/TokyoGhoulRey/Defs/GeneDefs/Genes_Kagune.xml
+========================================
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <!-- Базовый шаблон для генов кагуне -->
+  <GeneDef Name="KaguneTypeBase" Abstract="True">
+    <displayCategory>TG_Kagune</displayCategory>
+    <exclusionTags>
+    </exclusionTags>
+    <biostatCpx>3</biostatCpx>
+    <biostatMet>-2</biostatMet>
+    <displayOrderInCategory>200</displayOrderInCategory>
+  </GeneDef>
+
+  <!-- УКАКУ -->
+    <GeneDef ParentName="KaguneTypeBase">
+    <defName>Gene_Ukaku</defName>
+    <label>Укаку</label>
+    <abilities>
+      <li>Release_Ukaku</li>
+      <li>Ukaku_Fire</li>
+    </abilities>
+    <renderNodeProperties>
+      <li Class="TokyoGhoulMod.PawnRenderNodeProperties_Kagune">
+        <nodeClass>TokyoGhoulMod.PawnRenderNode_Kagune</nodeClass>
+        <workerClass>TokyoGhoulMod.PawnRenderNodeWorker_Kagune</workerClass>
+        <kaguneTag>Ukaku</kaguneTag>
+        <texPath>Things/Pawn/Kagune/Ukaku</texPath>
+        <parentTagDef>Body</parentTagDef>
+        <drawData>
+          <defaultData><layer>-2</layer></defaultData>
+          <dataNorth><layer>80</layer></dataNorth>
+        </drawData>
+        <baseScale>1.5</baseScale>
+      </li>
+    </renderNodeProperties>
+  </GeneDef>
+
+  <!-- РИНКАКУ -->
+  <GeneDef ParentName="KaguneTypeBase">
+    <defName>Gene_Rinkaku</defName>
+    <label>Ринкаку</label>
+    <abilities><li>Release_Rinkaku</li></abilities>
+    <renderNodeProperties>
+      <li Class="TokyoGhoulMod.PawnRenderNodeProperties_Kagune">
+        <nodeClass>TokyoGhoulMod.PawnRenderNode_Kagune</nodeClass>
+        <workerClass>TokyoGhoulMod.PawnRenderNodeWorker_Kagune</workerClass>
+        <kaguneTag>Rinkaku</kaguneTag>
+        <texPath>Things/Pawn/Kagune/Rinkaku</texPath>
+        <parentTagDef>Body</parentTagDef>
+        <drawData>
+          <defaultData><layer>-2</layer></defaultData>
+          <dataNorth><layer>80</layer></dataNorth>
+        </drawData>
+        <baseScale>1.6</baseScale>
+      </li>
+    </renderNodeProperties>
+  </GeneDef>
+
+  <!-- КОКАКУ -->
+<GeneDef ParentName="KaguneTypeBase">
+    <defName>Gene_Koukaku</defName>
+    <label>Кокаку</label>
+    <abilities><li>Release_Koukaku</li></abilities>
+    <renderNodeProperties>
+      <li Class="TokyoGhoulMod.PawnRenderNodeProperties_Kagune">
+        <nodeClass>TokyoGhoulMod.PawnRenderNode_Kagune</nodeClass>
+        <workerClass>TokyoGhoulMod.PawnRenderNodeWorker_Kagune</workerClass>
+        <kaguneTag>Koukaku</kaguneTag>
+        <texPath>Things/Pawn/Kagune/Koukaku</texPath>
+        <parentTagDef>Body</parentTagDef>
+        <drawData>
+          <defaultData><layer>-2</layer></defaultData>
+          <dataNorth><layer>80</layer></dataNorth>
+        </drawData>
+        <baseScale>1.3</baseScale>
+      </li>
+    </renderNodeProperties>
+  </GeneDef>
+
+  <!-- БИКАКУ (Исправлен слой и тег) -->
+  <GeneDef ParentName="KaguneTypeBase">
+    <defName>Gene_Bikaku</defName>
+    <label>Бикаку</label>
+    <abilities><li>Release_Bikaku</li></abilities>
+    <renderNodeProperties>
+      <li Class="TokyoGhoulMod.PawnRenderNodeProperties_Kagune">
+        <nodeClass>TokyoGhoulMod.PawnRenderNode_Kagune</nodeClass>
+        <workerClass>TokyoGhoulMod.PawnRenderNodeWorker_Kagune</workerClass>
+        <kaguneTag>Bikaku</kaguneTag>
+        <texPath>Things/Pawn/Kagune/Bikaku</texPath>
+        <parentTagDef>Body</parentTagDef>
+        <drawData>
+          <defaultData><layer>-2</layer></defaultData>
+          <dataNorth><layer>80</layer></dataNorth>
+        </drawData>
+        <baseScale>1.2</baseScale>
+      </li>
+    </renderNodeProperties>
+  </GeneDef>
+
+</Defs>
+
+/TokyoGhoulRey/Defs/GeneDefs/Genes_KaguneColors.xml
+========================================
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <GeneDef Name="TG_KaguneColorBase" Abstract="True">
+    <displayCategory>TG_Kagune</displayCategory>
+    <exclusionTags><li>KaguneColor</li></exclusionTags>
+    <biostatCpx>1</biostatCpx>
+    <biostatMet>0</biostatMet>
+    <displayOrderInCategory>300</displayOrderInCategory>
+  </GeneDef>
+
+  <GeneDef ParentName="TG_KaguneColorBase">
+    <defName>TG_ColorRed</defName>
+    <label>красное кагуне</label>
+    <renderNodeProperties><li><nodeClass>PawnRenderNode</nodeClass><color>(200, 30, 30)</color></li></renderNodeProperties>
+  </GeneDef>
+
+  <GeneDef ParentName="TG_KaguneColorBase">
+    <defName>TG_ColorPurple</defName>
+    <label>фиолетовое кагуне</label>
+    <renderNodeProperties><li><nodeClass>PawnRenderNode</nodeClass><color>(130, 30, 200)</color></li></renderNodeProperties>
+  </GeneDef>
+
+  <GeneDef ParentName="TG_KaguneColorBase">
+    <defName>TG_ColorBlue</defName>
+    <label>лазурное кагуне</label>
+    <renderNodeProperties><li><nodeClass>PawnRenderNode</nodeClass><color>(30, 100, 220)</color></li></renderNodeProperties>
+  </GeneDef>
+
+  <GeneDef ParentName="TG_KaguneColorBase">
+    <defName>TG_ColorGreen</defName>
+    <label>изумрудное кагуне</label>
+    <renderNodeProperties><li><nodeClass>PawnRenderNode</nodeClass><color>(40, 180, 60)</color></li></renderNodeProperties>
+  </GeneDef>
+
+  <GeneDef ParentName="TG_KaguneColorBase">
+    <defName>TG_ColorYellow</defName>
+    <label>золотистое кагуне</label>
+    <renderNodeProperties><li><nodeClass>PawnRenderNode</nodeClass><color>(230, 190, 20)</color></li></renderNodeProperties>
+  </GeneDef>
+
+  <GeneDef ParentName="TG_KaguneColorBase">
+    <defName>TG_ColorOrange</defName>
+    <label>огненное кагуне</label>
+    <renderNodeProperties><li><nodeClass>PawnRenderNode</nodeClass><color>(255, 110, 20)</color></li></renderNodeProperties>
+  </GeneDef>
+
+  <GeneDef ParentName="TG_KaguneColorBase">
+    <defName>TG_ColorPink</defName>
+    <label>розовое кагуне</label>
+    <renderNodeProperties><li><nodeClass>PawnRenderNode</nodeClass><color>(255, 105, 180)</color></li></renderNodeProperties>
+  </GeneDef>
+
+  <GeneDef ParentName="TG_KaguneColorBase">
+    <defName>TG_ColorWhite</defName>
+    <label>белоснежное кагуне</label>
+    <renderNodeProperties><li><nodeClass>PawnRenderNode</nodeClass><color>(220, 230, 255)</color></li></renderNodeProperties>
+  </GeneDef>
+
+  <GeneDef ParentName="TG_KaguneColorBase">
+    <defName>TG_ColorBlack</defName>
+    <label>угольное кагуне</label>
+    <renderNodeProperties><li><nodeClass>PawnRenderNode</nodeClass><color>(40, 40, 45)</color></li></renderNodeProperties>
+  </GeneDef>
+
+  <GeneDef ParentName="TG_KaguneColorBase">
+    <defName>TG_ColorTeal</defName>
+    <label>бирюзовое кагуне</label>
+    <renderNodeProperties><li><nodeClass>PawnRenderNode</nodeClass><color>(0, 180, 180)</color></li></renderNodeProperties>
+  </GeneDef>
+</Defs>
+
+/TokyoGhoulRey/Defs/GeneDefs/Gene_RCCells.xml
+========================================
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <!-- 1. Сначала определяем сам ТИП ресурса -->
+  <GeneResourceDef>
+    <defName>RCCells</defName>
+    <label>RC-клетки</label>
+    <resourceLabel>RC</resourceLabel>
+    <showInHealthTab>true</showInHealthTab>
+  </GeneResourceDef>
+
+  <!-- 2. Затем ген, который его использует -->
+  <GeneDef>
+    <defName>Gene_RCCells</defName>
+    <label>Биология гуля</label>
+    <description>Особая биология гуля, позволяющая накапливать и использовать RC-клетки.</description>
+    <geneClass>TokyoGhoulMod.Gene_RCCells</geneClass>
+    <resourceDef>RCCells</resourceDef> 
+    <resourceGizmoType>TokyoGhoulMod.GeneGizmo_RCCells</resourceGizmoType>
+    <resourceGizmoThresholds>
+      <li>0.2</li><li>0.5</li><li>0.8</li>
+    </resourceGizmoThresholds>
+    <biostatMet>2</biostatMet> 
+    <biostatCpx>3</biostatCpx>
+    <displayOrderInCategory>100</displayOrderInCategory>
+    <statFactors>
+      <HungerRateFactor>0.1</HungerRateFactor> <!-- ИСПРАВЛЕНО НАЗВАНИЕ -->
+    </statFactors>
+  </GeneDef>
+</Defs>
+
+/TokyoGhoulRey/Defs/HediffDefs/CannibalHigh.xml
+========================================
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <HediffDef>
+    <defName>TG_GhoulCannibalHigh</defName>
+    <label>каннибальское насыщение</label>
+    <description>Гуль потребил плоть себе подобного. Огромный приток RC-клеток вызывает временный прилив ярости и силы.</description>
+    <isBad>false</isBad>
+    <stages>
+      <li>
+        <statOffsets>
+          <li><stat>MeleeDamageFactor</stat><offset>0.20</offset></li>
+          <li><stat>MoveSpeed</stat><offset>0.20</offset></li>
+        </statOffsets>
+      </li>
+    </stages>
+    <comps>
+      <li Class="HediffCompProperties_Disappear">
+        <disappearAfterTicks>15000~30000</disappearAfterTicks> <!-- Около половины дня -->
+      </li>
+    </comps>
+  </HediffDef>
+</Defs>
+
+/TokyoGhoulRey/Defs/HediffDefs/Hediffs_Ghouls.xml
+========================================
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+    <HediffDef>
+        <defName>Kakugan</defName>
+        <label>Какуган</label>
+        <description>Глаз гуля. Зрачок краснеет, а склера становится черной.</description>
+        <hediffClass>HediffWithComps</hediffClass>
+        <defaultLabelColor>(1, 0.2, 0.2)</defaultLabelColor>
+        <isBad>false</isBad> 
+        <stages>
+            <li>
+                <capMods><li><capacity>Sight</capacity><offset>0.50</offset></li></capMods>
+            </li>
+        </stages>
+        <renderNodeProperties>
+			<li Class="TokyoGhoulMod.PawnRenderNodeProperties_Single">
+            <nodeClass>TokyoGhoulMod.PawnRenderNode_Single</nodeClass>
+            <workerClass>TokyoGhoulMod.PawnRenderNodeWorker_Single</workerClass>
+            
+            <texPath>Things/Pawn/Eyes/Kakugan_Male</texPath>
+            <texPathFemale>Things/Pawn/Eyes/Kakugan_Female</texPathFemale>
+            <parentTagDef>Head</parentTagDef>
+            
+            <!-- УМЕНЬШАЕМ В 2 РАЗА -->
+            <baseScale>0.2</baseScale>
+
+            <skipAtRotation><li>North</li></skipAtRotation>
+            <drawData>
+              <defaultData>
+                <layer>54</layer>
+              </defaultData>
+            </drawData>
+          </li>
+        </renderNodeProperties>
+    </HediffDef>
+</Defs>
+
+/TokyoGhoulRey/Defs/HediffDefs/Hediffs_Kagune_Active.xml
+========================================
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <HediffDef Name="KaguneActiveBase" Abstract="True">
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(0.8, 0.1, 0.1)</defaultLabelColor>
+    <isBad>false</isBad>
+    <priceImpact>false</priceImpact>
+  </HediffDef>
+
+  <HediffDef ParentName="KaguneActiveBase">
+    <defName>Hediff_Ukaku</defName>
+    <label>Кагуне (Укаку)</label>
+    <description>Крылоподобное кагуне. Позволяет двигаться невероятно быстро и стрелять кристаллизованными RC-клетками, но быстро истощает владельца.</description>
+    <stages>
+      <li>
+        <statOffsets>
+          <MoveSpeed>1.5</MoveSpeed>
+		  <ShootingAccuracyPawn>7.0</ShootingAccuracyPawn>
+          <MeleeHitChance>2.0</MeleeHitChance>
+        </statOffsets>
+        <statFactors>
+          <IncomingDamageFactor>1.2</IncomingDamageFactor> <!-- Получает на 20% больше урона -->
+        </statFactors>
+        <capMods>
+          <li><capacity>Consciousness</capacity><offset>0.1</offset></li>
+        </capMods>
+      </li>
+    </stages>
+    <comps>
+      <li Class="HediffCompProperties_VerbGiver">
+        <tools>
+          <li>
+            <label>удар крылом укаку</label>
+            <capacities><li>Cut</li></capacities>
+            <power>12</power>
+            <cooldownTime>0.8</cooldownTime> <!-- Очень быстрая атака -->
+          </li>
+        </tools>
+      </li>
+    </comps>
+  </HediffDef>
+
+  <HediffDef ParentName="KaguneActiveBase">
+    <defName>Hediff_Koukaku</defName>
+    <label>Кагуне (Кокаку)</label>
+    <description>Тяжелое и прочное кагуне, обвивающее руку подобно щиту или мечу. Обладает колоссальной прочностью, но сильно ограничивает подвижность.</description>
+    <stages>
+      <li>
+        <statOffsets>
+          <ArmorRating_Sharp>0.50</ArmorRating_Sharp>
+          <ArmorRating_Blunt>0.30</ArmorRating_Blunt>
+          <MoveSpeed>-0.8</MoveSpeed> <!-- Сильное замедление -->
+        </statOffsets>
+      </li>
+    </stages>
+    <comps>
+      <li Class="HediffCompProperties_VerbGiver">
+        <tools>
+          <li>
+            <label>лезвие кокаку</label>
+            <capacities><li>Stab</li><li>Blunt</li></capacities>
+            <power>28</power> <!-- Огромный урон -->
+            <cooldownTime>2.2</cooldownTime>
+            <armorPenetration>0.6</armorPenetration>
+          </li>
+        </tools>
+      </li>
+    </comps>
+  </HediffDef>
+
+  <HediffDef ParentName="KaguneActiveBase">
+    <defName>Hediff_Rinkaku</defName>
+    <label>Кагуне (Ринкаку)</label>
+    <description>Чешуйчатые щупальца, обладающие огромной силой удара и способностью ускорять регенерацию владельца ценой повышенной болевой чувствительности.</description>
+    <stages>
+      <li>
+        <statOffsets>
+          <PainShockThreshold>-0.10</PainShockThreshold> <!-- Быстрее падает от боли -->
+          <MeleeDamageFactor>0.25</MeleeDamageFactor>
+        </statOffsets>
+        <statFactors>
+            <InjuryHealingFactor>3.0</InjuryHealingFactor> <!-- Реген x3 -->
+        </statFactors>
+      </li>
+    </stages>
+    <comps>
+      <li Class="HediffCompProperties_VerbGiver">
+        <tools>
+          <li>
+            <label>щупальце ринкаку</label>
+            <capacities><li>Cut</li></capacities>
+            <power>20</power>
+            <cooldownTime>1.2</cooldownTime>
+            <chanceFactor>2.0</chanceFactor>
+          </li>
+        </tools>
+      </li>
+    </comps>
+  </HediffDef>
+
+  <HediffDef ParentName="KaguneActiveBase">
+    <defName>Hediff_Bikaku</defName>
+    <label>Кагуне (Бикаку)</label>
+    <description>Хвостатое кагуне, не имеющее ярких недостатков. Идеально подходит для защиты и маневрирования в ближнем бою.</description>
+    <stages>
+      <li>
+        <statOffsets>
+          <MeleeDodgeChance>15</MeleeDodgeChance>
+          <MoveSpeed>0.3</MoveSpeed>
+        </statOffsets>
+      </li>
+    </stages>
+    <comps>
+      <li Class="HediffCompProperties_VerbGiver">
+        <tools>
+          <li>
+            <label>хвост бикаку</label>
+            <capacities><li>Blunt</li><li>Poke</li></capacities>
+            <power>16</power>
+            <cooldownTime>1.0</cooldownTime>
+          </li>
+        </tools>
+      </li>
+    </comps>
+  </HediffDef>
+
+</Defs>
+
+/TokyoGhoulRey/Defs/HediffDefs/Kakuho_System.xml
+========================================
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <!-- ======================== БАЗОВЫЕ ШАБЛОНЫ (Abstract) ======================== -->
+
+  <!-- База для предметов-контейнеров -->
+  <ThingDef Name="TG_KakuhoItemBase" ParentName="BodyPartBase" Abstract="True">
+    <graphicData>
+      <texPath>Things/Item/Health/HealthItem</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <statBases>
+      <MarketValue>800</MarketValue>
+      <Mass>2</Mass>
+    </statBases>
+    <techLevel>Industrial</techLevel>
+    <thingCategories>
+      <li>BodyPartsBionic</li>
+    </thingCategories>
+  </ThingDef>
+
+  <!-- База для вживленных органов -->
+  <HediffDef Name="TG_KakuhoHediffBase" ParentName="ImplantHediffBase" Abstract="True">
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(0.9, 0.4, 0.4)</defaultLabelColor>
+    <isBad>false</isBad>
+    <stages>
+      <li>
+        <severityPerDay>0.1</severityPerDay>
+        <label>адаптация</label>
+        <capMods>
+          <li><capacity>Consciousness</capacity><offset>0.05</offset></li>
+        </capMods>
+      </li>
+      <li>
+        <minSeverity>2.0</minSeverity>
+        <label>активация</label>
+        <statOffsets>
+          <MeleeDamageFactor>0.15</MeleeDamageFactor>
+        </statOffsets>
+      </li>
+    </stages>
+  </HediffDef>
+
+  <!-- База для операций -->
+  <RecipeDef Name="TG_KakuhoRecipeBase" ParentName="SurgeryInstallImplantBase" Abstract="True">
+    <workerClass>TokyoGhoulMod.Recipe_InstallKakuho</workerClass> <!-- НАШ C# КЛАСС -->
+    <appliedOnFixedBodyParts>
+      <li>Spine</li>
+    </appliedOnFixedBodyParts>
+    <jobString>Вживляет какухо.</jobString>
+  </RecipeDef>
+
+  <!-- ======================== РИНКАКУ ======================== -->
+
+  <ThingDef ParentName="TG_KakuhoItemBase">
+    <defName>Kakuho_Rinkaku_Item</defName>
+    <label>какухо (ринкаку)</label>
+    <description>Извлечённое какухо типа ринкаку.</description>
+  </ThingDef>
+
+  <HediffDef ParentName="TG_KakuhoHediffBase">
+    <defName>Hediff_KakuhoRinkaku</defName>
+    <label>какухо ринкаку</label>
+  </HediffDef>
+
+  <RecipeDef ParentName="TG_KakuhoRecipeBase">
+    <defName>InstallKakuhoRinkaku</defName>
+    <label>вживить какухо ринкаку</label>
+    <addsHediff>Hediff_KakuhoRinkaku</addsHediff>
+    <ingredients><li><filter><thingDefs><li>Kakuho_Rinkaku_Item</li></thingDefs></filter><count>1</count></li></ingredients>
+    <fixedIngredientFilter><thingDefs><li>Kakuho_Rinkaku_Item</li></thingDefs></fixedIngredientFilter>
+  </RecipeDef>
+
+  <!-- ======================== УКАКУ ======================== -->
+
+  <ThingDef ParentName="TG_KakuhoItemBase">
+    <defName>Kakuho_Ukaku_Item</defName>
+    <label>какухо (укаку)</label>
+    <description>Извлечённое какухо типа укаку.</description>
+  </ThingDef>
+
+  <HediffDef ParentName="TG_KakuhoHediffBase">
+    <defName>Hediff_KakuhoUkaku</defName>
+    <label>какухо укаку</label>
+  </HediffDef>
+
+  <RecipeDef ParentName="TG_KakuhoRecipeBase">
+    <defName>InstallKakuhoUkaku</defName>
+    <label>вживить какухо укаку</label>
+    <addsHediff>Hediff_KakuhoUkaku</addsHediff>
+    <ingredients><li><filter><thingDefs><li>Kakuho_Ukaku_Item</li></thingDefs></filter><count>1</count></li></ingredients>
+    <fixedIngredientFilter><thingDefs><li>Kakuho_Ukaku_Item</li></thingDefs></fixedIngredientFilter>
+  </RecipeDef>
+
+  <!-- ======================== КОКАКУ ======================== -->
+
+  <ThingDef ParentName="TG_KakuhoItemBase">
+    <defName>Kakuho_Koukaku_Item</defName>
+    <label>какухо (кокаку)</label>
+    <description>Извлечённое какухо типа кокаку.</description>
+  </ThingDef>
+
+  <HediffDef ParentName="TG_KakuhoHediffBase">
+    <defName>Hediff_KakuhoKoukaku</defName>
+    <label>какухо кокаку</label>
+  </HediffDef>
+
+  <RecipeDef ParentName="TG_KakuhoRecipeBase">
+    <defName>InstallKakuhoKoukaku</defName>
+    <label>вживить какухо кокаку</label>
+    <addsHediff>Hediff_KakuhoKoukaku</addsHediff>
+    <ingredients><li><filter><thingDefs><li>Kakuho_Koukaku_Item</li></thingDefs></filter><count>1</count></li></ingredients>
+    <fixedIngredientFilter><thingDefs><li>Kakuho_Koukaku_Item</li></thingDefs></fixedIngredientFilter>
+  </RecipeDef>
+
+  <!-- ======================== БИКАКУ ======================== -->
+
+  <ThingDef ParentName="TG_KakuhoItemBase">
+    <defName>Kakuho_Bikaku_Item</defName>
+    <label>какухо (бикаку)</label>
+    <description>Извлечённое какухо типа бикаку.</description>
+  </ThingDef>
+
+  <HediffDef ParentName="TG_KakuhoHediffBase">
+    <defName>Hediff_KakuhoBikaku</defName>
+    <label>какухо бикаку</label>
+  </HediffDef>
+
+  <RecipeDef ParentName="TG_KakuhoRecipeBase">
+    <defName>InstallKakuhoBikaku</defName>
+    <label>вживить какухо бикаку</label>
+    <addsHediff>Hediff_KakuhoBikaku</addsHediff>
+    <ingredients><li><filter><thingDefs><li>Kakuho_Bikaku_Item</li></thingDefs></filter><count>1</count></li></ingredients>
+    <fixedIngredientFilter><thingDefs><li>Kakuho_Bikaku_Item</li></thingDefs></fixedIngredientFilter>
+  </RecipeDef>
+
+  <!-- ======================== УДАЛЕНИЕ (ОБЩЕЕ) ======================== -->
+
+  <RecipeDef ParentName="SurgeryRemoveImplantBase">
+    <defName>RemoveKakuho</defName>
+    <label>извлечь какухо</label>
+    <description>Хирургическое извлечение какухо.</description>
+    <workerClass>TokyoGhoulMod.Recipe_RemoveKakuho</workerClass> 
+    <jobString>Извлекает какухо.</jobString>
+    <removesHediff>Hediff_KakuhoRinkaku</removesHediff> 
+  </RecipeDef>
+
+</Defs>
+
+/TokyoGhoulRey/Defs/HediffDefs/RCStarvation.xml
+========================================
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <HediffDef>
+    <defName>RCStarvation</defName>
+    <label>RC-голод</label>
+    <description>Организм гуля требует свежих RC-клеток. При критическом истощении тело начинает пожирать само себя, вызывая безумие и смерть.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <initialSeverity>0.01</initialSeverity>
+    <maxSeverity>1.0</maxSeverity>
+    <defaultLabelColor>(0.9, 0.5, 0.2)</defaultLabelColor>
+    <stages>
+      <!-- Стадия 1: Легкий голод -->
+      <li>
+        <label>начальное истощение</label>
+        <becomeVisible>true</becomeVisible>
+        <painOffset>0.05</painOffset>
+        <capMods>
+          <li><capacity>Consciousness</capacity><offset>-0.05</offset></li>
+        </capMods>
+      </li>
+      <!-- Стадия 2: Сильный голод -->
+      <li>
+        <minSeverity>0.4</minSeverity>
+        <label>сильный голод</label>
+        <painOffset>0.15</painOffset>
+        <capMods>
+          <li><capacity>Consciousness</capacity><offset>-0.15</offset></li>
+          <li><capacity>Manipulation</capacity><offset>-0.10</offset></li>
+        </capMods>
+      </li>
+      <!-- Стадия 3: Критический голод -->
+      <li>
+        <minSeverity>0.8</minSeverity>
+        <label>критическое состояние</label>
+        <painOffset>0.40</painOffset>
+        <capMods>
+          <li><capacity>Consciousness</capacity><setMax>0.6</setMax></li>
+          <li><capacity>Moving</capacity><offset>-0.20</offset></li>
+        </capMods>
+      </li>
+    </stages>
+  </HediffDef>
+</Defs>
+
+/TokyoGhoulRey/Defs/HediffDefs/RCSyndrome.xml
+========================================
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <HediffDef>
+    <defName>TG_RCSyndrome</defName>
+    <label>RC-синдром</label>
+    <description>Тяжелое дегенеративное состояние, вызванное попаданием клеток гуля в организм человека. Клетки гуля начинают конфликтовать с тканями носителя, вызывая неконтролируемые мутации, жуткую боль и отказ органов.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(0.8, 0.4, 0.9)</defaultLabelColor>
+    <stages>
+      <li>
+        <label>начальный</label>
+        <painOffset>0.10</painOffset>
+        <capMods>
+          <li><capacity>Consciousness</capacity><offset>-0.10</offset></li>
+        </capMods>
+      </li>
+      <li>
+        <minSeverity>0.4</minSeverity>
+        <label>развитый</label>
+        <painOffset>0.25</painOffset>
+        <capMods>
+          <li><capacity>Consciousness</capacity><offset>-0.20</offset></li>
+          <li><capacity>Manipulation</capacity><offset>-0.30</offset></li>
+        </capMods>
+      </li>
+      <li>
+        <minSeverity>0.8</minSeverity>
+        <label>критический</label>
+        <painOffset>0.60</painOffset>
+        <capMods>
+          <li><capacity>Consciousness</capacity><setMax>0.5</setMax></li>
+          <li><capacity>Manipulation</capacity><setMax>0.2</setMax></li>
+        </capMods>
+      </li>
+    </stages>
+    <comps>
+      <li Class="HediffCompProperties_SeverityPerDay">
+        <severityPerDay>-0.05</severityPerDay> <!-- Проходит за 20 дней -->
+      </li>
+    </comps>
+  </HediffDef>
+</Defs>
+
+/TokyoGhoulRey/Defs/MemeDefs/Meme.xml
+========================================
+<Defs>
+
+</Defs>
+
+/TokyoGhoulRey/Defs/ThingDefs/Items_GhoulMeat.xml
+========================================
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <ThingDef ParentName="ResourceBase"> <!-- Изменено с MeatBase на ResourceBase для стабильности -->
+    <defName>Meat_Ghoul</defName>
+    <label>мясо гуля</label>
+    <description>Сырое, жилистое мясо гуля. Очень токсично для людей.</description>
+    <thingClass>ThingWithComps</thingClass>
+    <graphicData>
+      <texPath>Things/Item/Resource/MeatTwisted/MeatTwisted</texPath>
+      <graphicClass>Graphic_StackCount</graphicClass>
+    </graphicData>
+    <statBases>
+      <MaxHitPoints>60</MaxHitPoints>
+      <MarketValue>2.0</MarketValue>
+      <Mass>0.03</Mass>
+      <Flammability>0.5</Flammability>
+      <Nutrition>0.05</Nutrition>
+    </statBases>
+    <ingestible>
+      <foodType>Meat</foodType>
+      <preferability>DesperateOnly</preferability>
+      <ingestEffect>EatMeat</ingestEffect>
+      <ingestSound>RawMeat_Eat</ingestSound>
+    </ingestible>
+    <comps>
+      <li Class="CompProperties_Rottable">
+        <daysToRotStart>2</daysToRotStart>
+        <rotDestroys>true</rotDestroys>
+      </li>
+    </comps>
+  </ThingDef>
+</Defs>
+
+/TokyoGhoulRey/Defs/ThingDefs/RC_Projectiles.xml
+========================================
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <ThingDef ParentName="BaseBullet">
+    <defName>RC_Shard</defName>
+    <label>RC-кристалл</label>
+    <graphicData>
+      <!-- Путь к текстуре: Textures/Things/Projectile/RCShard.png -->
+      <texPath>Things/Projectile/RCShard</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <!-- ShaderType "TransparentPostLight" заставит кристалл немного светиться -->
+      <shaderType>TransparentPostLight</shaderType>
+      <drawSize>(0.8, 0.8)</drawSize>
+    </graphicData>
+    <projectile>
+      <damageDef>Stab</damageDef>
+      <damageAmountBase>20</damageAmountBase>
+      <speed>100</speed>
+      <armorPenetrationBase>0.40</armorPenetrationBase>
+      <flyOverhead>false</flyOverhead>
+    </projectile>
+  </ThingDef>
+</Defs>
+
+/TokyoGhoulRey/Defs/ThoughtDefs/Thoughts_Ghouls.xml
+========================================
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <ThoughtDef>
+    <defName>TG_RCStarvationMood</defName>
+    <workerClass>TokyoGhoulMod.ThoughtWorker_RCStarvation</workerClass>
+    <validWhileDespawned>true</validWhileDespawned>
+    <stages>
+      <li>
+        <label>голод гуля (начальный)</label>
+        <description>Живот сводит. Обычная еда кажется пеплом. Мне нужно что-то... другое.</description>
+        <baseMoodEffect>-5</baseMoodEffect>
+      </li>
+      <li>
+        <label>голод гуля (сильный)</label>
+        <description>Запах людей вокруг становится таким притягательным... Трудно сохранять ясность ума.</description>
+        <baseMoodEffect>-12</baseMoodEffect>
+      </li>
+      <li>
+        <label>голод гуля (критический)</label>
+        <description>ПЛОТЬ. ПЛОТЬ. ПЛОТЬ. Я СЛЫШУ, КАК БЬЮТСЯ ИХ СЕРДЦА. Я БОЛЬШЕ НЕ МОГУ ЭТО ТЕРПЕТЬ!</description>
+        <baseMoodEffect>-25</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+</Defs>
+
+/TokyoGhoulRey/Defs/XenotypeDefs/Xenotype_Ghoul.xml
+========================================
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+	<XenotypeDef>
+		<defName>TG_Ghoul</defName>
+		<label>Гуль</label>
+		<description>Сверхчеловек-хищник.</description>
+		<iconPath>UI/Icons/Xenotypes/Sanguophage</iconPath>
+		<genes>
+			<li>Gene_RCCells</li>
+			
+			<li>TotalHealing</li> 
+			<li>Superclotting</li> 
+			<li>PerfectImmunity</li> 
+			<li>Robust</li> 
+			<li>WoundHealing_SuperFast</li> 
+			<li>MoveSpeed_Quick</li> 
+			<li>LongJumpLegs</li> 
+			<li>DarkVision</li> 
+		</genes>
+	</XenotypeDef>
+</Defs>
+
+/TokyoGhoulRey/Languages/Russian/Keyed/Keys.xml
+========================================
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+
+  <!-- Сообщения об активации -->
+  <TG_KaguneReleased>{0}: {1} высвобожден!</TG_KaguneReleased>
+  <TokyoGhoul_KaguneRetracted>{0} втягивает кагуне.</TokyoGhoul_KaguneRetracted>
+  <TokyoGhoul_KaguneRetractedCells>Кагуне {0} самопроизвольно втянулось из-за нехватки RC-клеток!</TokyoGhoul_KaguneRetractedCells>
+
+  <!-- Ошибки применения способностей (AcceptanceReport) -->
+  <TG_MissingKakuho>Отсутствует орган какухо</TG_MissingKakuho>
+  <TG_NeedUkaku>Нужно сначала активировать Укаку</TG_NeedUkaku>
+  <TG_LowRCCells>Недостаточно RC-клеток</TG_LowRCCells>
+
+  <!-- Ресурсы и Гизмо -->
+  <TG_RCCellsLabel>RC-клетки</TG_RCCellsLabel>
+  <TG_RCCellsDesc>Запас RC-клеток. Необходим для активации кагуне, использования способностей и ускоренной регенерации.</TG_RCCellsDesc>
+
+  <!-- События биологии -->
+  <TG_KaguneTypeAwakened>У {0} пробудился тип кагуне: {1}</TG_KaguneTypeAwakened>
+  <TG_GhoulHungerReason>гулий голод</TG_GhoulHungerReason>
+  <TG_GhoulsCantEatNormalFood>Гули не могут переваривать обычную пищу! Их организм отвергает её.</TG_GhoulsCantEatNormalFood>
+  <TG_GhoulCured>{0} больше не является гулем (какухо удалено).</TG_GhoulCured>
+  
+  <!-- Система голода -->
+  <TG_GhoulStarvingToDeath>{0} умирает от RC-истощения! Организм пожирает сам себя.</TG_GhoulStarvingToDeath>
+  <TG_AlertRCStarvationLabel>Критический RC-голод</TG_AlertRCStarvationLabel>
+  <TG_AlertRCStarvationDesc>Следующие гули находятся на грани безумия или смерти от истощения. Им срочно нужна человечина:\n\n{0}</TG_AlertRCStarvationDesc>
+  <TG_KakuhoFoundDuringButchery>При разделке тела {0} удалось извлечь уцелевший орган: {1}.</TG_KakuhoFoundDuringButchery>
+  <TG_HumanAteGhoulMeat>{0} съел мясо гуля! В его крови начался RC-коллапс.</TG_HumanAteGhoulMeat>
+  <TG_KakujaStirring>Внутри {0} что-то меняется... Его какухо пульсирует от поглощенной силы других гулей.</TG_KakujaStirring>
+  <TG_ChimeraBorn>Невероятно! {0} родился Химерой, унаследовав типы кагуне обоих родителей.</TG_ChimeraBorn>
+</LanguageData>
+
