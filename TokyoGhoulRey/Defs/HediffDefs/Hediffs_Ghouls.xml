@@ -22,7 +22,7 @@
             <parentTagDef>Head</parentTagDef>
             
             <!-- УМЕНЬШАЕМ В 2 РАЗА -->
-            <baseScale>0.2</baseScale>
+            <baseScale>0.35</baseScale>
 
             <skipAtRotation><li>North</li></skipAtRotation>
             <drawData>

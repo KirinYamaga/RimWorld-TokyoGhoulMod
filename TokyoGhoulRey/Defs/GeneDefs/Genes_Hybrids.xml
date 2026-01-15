@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <!-- Маркер Одноглазого -->
+  <GeneDef>
+    <defName>TG_HalfGhoul_Marker</defName>
+    <label>ген полугуля</label>
+    <description>Генетический маркер одноглазого гуля. Позволяет иметь повышенный запас RC-клеток и огромный потенциал развития.</description>
+    <displayCategory>TG_Kagune</displayCategory>
+    <biostatCpx>2</biostatCpx>
+    <biostatMet>-1</biostatMet>
+  </GeneDef>
+
+  <!-- Маркер Получеловека -->
+  <GeneDef>
+    <defName>TG_HalfHuman_Marker</defName>
+    <label>ген получеловека</label>
+    <description>Генетический маркер получеловека. Дает выдающиеся физические способности, но лишает возможности использовать кагуне.</description>
+    <displayCategory>TG_Kagune</displayCategory>
+    <biostatCpx>2</biostatCpx>
+    <biostatMet>2</biostatMet>
+  </GeneDef>
+</Defs>

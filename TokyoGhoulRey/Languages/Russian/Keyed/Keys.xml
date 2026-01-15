@@ -29,4 +29,10 @@
   <TG_HumanAteGhoulMeat>{0} съел мясо гуля! В его крови начался RC-коллапс.</TG_HumanAteGhoulMeat>
   <TG_KakujaStirring>Внутри {0} что-то меняется... Его какухо пульсирует от поглощенной силы других гулей.</TG_KakujaStirring>
   <TG_ChimeraBorn>Невероятно! {0} родился Химерой, унаследовав типы кагуне обоих родителей.</TG_ChimeraBorn>
+  <TG_MissingSpecificKakuho>Отсутствует орган какухо типа {0}</TG_MissingSpecificKakuho>
+  <TG_ChimeraXenotypeLabel>Химера</TG_ChimeraXenotypeLabel>
+  <TG_HalfGhoulLabel>Одноглазый гуль</TG_HalfGhoulLabel>
+  <TG_HalfHumanLabel>Получеловек</TG_HalfHumanLabel>
+  <TG_HybridStillborn>Трагедия: гибридный плод {0} не пережил роды из-за биологической несовместимости.</TG_HybridStillborn>
+  <TG_HalfGhoulStillbornWarning>Гибридная беременность протекает тяжело. Без специфического питания (человечины) плод может погибнуть.</TG_HalfGhoulStillbornWarning>
 </LanguageData>

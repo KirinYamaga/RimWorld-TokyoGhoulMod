@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+	<!-- ПОЛУГУЛЬ (Одноглазый) -->
+	<XenotypeDef>
+		<defName>TG_HalfGhoul</defName>
+		<label>Полугуль</label>
+		<description>Редчайший гибрид человека и гуля. Превосходит обычных гулей в силе.</description>
+		<iconPath>UI/Icons/Xenotypes/Sanguophage</iconPath>
+		<inheritable>true</inheritable>
+		<genes>
+			<li>Gene_RCCells</li> <!-- Биология гуля -->
+			<li>TG_HalfGhoul_Marker</li> <!-- Наш маркер для C# -->
+			
+			<li>TotalHealing</li> 
+			<li>Superclotting</li> 
+			<li>PerfectImmunity</li> 
+			<li>Robust</li> 
+			<li>WoundHealing_SuperFast</li> 
+			<li>MoveSpeed_Quick</li> 
+			<li>LongJumpLegs</li> 
+			<li>DarkVision</li>
+			<li>MeleeDamage_Strong</li> 
+		</genes>
+	</XenotypeDef>
+
+	<!-- ПОЛУЧЕЛОВЕК -->
+	<XenotypeDef>
+		<defName>TG_HalfHuman</defName>
+		<label>Получеловек</label>
+		<description>Гибрид, унаследовавший только физическую мощь гулей. Не имеет кагуне и живет недолго.</description>
+		<iconPath>UI/Icons/Xenotypes/Sanguophage</iconPath>
+		<inheritable>true</inheritable>
+		<genes>
+			<li>TG_HalfHuman_Marker</li> <!-- Наш маркер -->
+			
+			<li>CellInstability_Major</li> <!-- Быстрое старение -->
+			<li>Shooting_Great</li> 
+			<li>Melee_Great</li> 
+			<li>Sleepy</li> 
+			<li>MeleeDamage_Strong</li> 
+			<li>Aggressive</li>
+			<li>MoveSpeed_Quick</li>
+		</genes>
+	</XenotypeDef>
+
+</Defs>

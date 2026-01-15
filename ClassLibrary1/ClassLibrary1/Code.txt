@@ -11,15 +11,14 @@ namespace TokyoGhoulMod
         public Ability_ToggleKagune() : base() { }
         public Ability_ToggleKagune(Pawn pawn) : base(pawn) { }
         public Ability_ToggleKagune(Pawn pawn, AbilityDef def) : base(pawn, def) { }
-        public Ability_ToggleKagune(Pawn pawn, Precept sourcePrecept, AbilityDef def) : base(pawn, sourcePrecept, def) { }
 
         public override bool Activate(LocalTargetInfo target, LocalTargetInfo dest)
         {
             base.Activate(target, dest);
 
-            string hediffDefName = this.def.defName.Replace("Release_", "Hediff_");
-            HediffDef kaguneHediffDef = DefDatabase<HediffDef>.GetNamed(hediffDefName, false);
-            HediffDef kakuganDef = DefDatabase<HediffDef>.GetNamed("Kakugan", false);
+            // Определяем тип (например, Ukaku) из названия способности
+            string typeTag = this.def.defName.Replace("Release_", "");
+            HediffDef kaguneHediffDef = DefDatabase<HediffDef>.GetNamed("Hediff_" + typeTag, false);
 
             if (kaguneHediffDef == null) return false;
 
@@ -27,28 +26,19 @@ namespace TokyoGhoulMod
 
             if (existing != null)
             {
+                // Если кагуне этого типа уже активно — убираем его
                 pawn.health.RemoveHediff(existing);
-                if (kakuganDef != null && !IsAnyKaguneActive())
-                {
-                    Hediff kakuganHediff = pawn.health.hediffSet.GetFirstHediffOfDef(kakuganDef);
-                    if (kakuganHediff != null) pawn.health.RemoveHediff(kakuganHediff);
-                }
                 Messages.Message("TokyoGhoul_KaguneRetracted".Translate(pawn.LabelShort), pawn, MessageTypeDefOf.SilentInput);
             }
             else
             {
-                RemoveExistingKagunes(pawn);
+                // ХИМЕРА: Мы БОЛЬШЕ НЕ вызываем RemoveExistingKagunes.
+                // Просто добавляем новое кагуне к уже имеющимся.
                 pawn.health.AddHediff(kaguneHediffDef);
-                if (kakuganDef != null && !pawn.health.hediffSet.HasHediff(kakuganDef))
-                {
-                    pawn.health.AddHediff(kakuganDef);
-                }
 
                 if (pawn.Map != null)
-                {
                     FleckMaker.ThrowMetaIcon(pawn.Position, pawn.Map, FleckDefOf.PsycastAreaEffect);
-                }
-                // ИСПРАВЛЕНО: Использование ключа трансляции с аргументами
+
                 Messages.Message("TG_KaguneReleased".Translate(pawn.LabelShort, kaguneHediffDef.label), MessageTypeDefOf.PositiveEvent);
             }
 
@@ -58,22 +48,6 @@ namespace TokyoGhoulMod
             return true;
         }
 
-        private bool IsAnyKaguneActive()
-        {
-            string[] tags = { "Ukaku", "Koukaku", "Rinkaku", "Bikaku" };
-            return pawn.health.hediffSet.hediffs.Any(h => h.def != null && tags.Any(tag => h.def.defName == "Hediff_" + tag));
-        }
-
-        private void RemoveExistingKagunes(Pawn p)
-        {
-            string[] tags = { "Ukaku", "Koukaku", "Rinkaku", "Bikaku" };
-            var toRemove = p.health.hediffSet.hediffs
-                .Where(h => h.def != null && tags.Any(tag => h.def.defName == "Hediff_" + tag))
-                .ToList();
-
-            foreach (var h in toRemove) p.health.RemoveHediff(h);
-        }
-
         public override AcceptanceReport CanCast
         {
             get
@@ -81,9 +55,14 @@ namespace TokyoGhoulMod
                 AcceptanceReport report = base.CanCast;
                 if (!report.Accepted) return report;
 
-                bool hasAnyKakuho = pawn.health.hediffSet.hediffs.Any(h => h.def != null && h.def.defName.Contains("Kakuho"));
-                // ИСПРАВЛЕНО: Замена текста на ключ
-                if (!hasAnyKakuho) return new AcceptanceReport("TG_MissingKakuho".Translate());
+                // Уточняем: нужно иметь какухо именно того типа, который мы пытаемся выпустить
+                string typeTag = this.def.defName.Replace("Release_", "");
+                HediffDef requiredKakuho = DefDatabase<HediffDef>.GetNamed("Hediff_Kakuho" + typeTag, false);
+
+                if (requiredKakuho == null || !pawn.health.hediffSet.HasHediff(requiredKakuho))
+                {
+                    return new AcceptanceReport("TG_MissingSpecificKakuho".Translate(typeTag));
+                }
 
                 return true;
             }
@@ -240,6 +219,150 @@ namespace TokyoGhoulMod
     }
 }
 
+/ClassLibrary1/GeneticsHelper.cs
+========================================
+﻿using RimWorld;
+using Verse;
+using System.Linq;
+using UnityEngine;
+
+namespace TokyoGhoulMod
+{
+    public static class GeneticsHelper
+    {
+        public static void InitializeGhoulishTraits(Pawn pawn)
+        {
+            if (pawn?.genes == null) return;
+
+            Pawn father = pawn.GetFather();
+            Pawn mother = pawn.GetMother();
+
+            if (father != null || mother != null)
+            {
+                ApplyInheritance(pawn, father, mother);
+            }
+            else
+            {
+                // Если родителей нет в мире (спавн рейдера или старт игры)
+                AssignRandomTraits(pawn);
+            }
+        }
+
+        private static void ApplyInheritance(Pawn child, Pawn father, Pawn mother)
+        {
+            // --- 1. НАСЛЕДОВАНИЕ ЦВЕТА ---
+            if (!HasColorGene(child))
+            {
+                GeneDef fColor = GetActiveKaguneColorGene(father);
+                GeneDef mColor = GetActiveKaguneColorGene(mother);
+
+                if (fColor != null && mColor != null && fColor != mColor)
+                {
+                    float rand = Rand.Value;
+                    if (rand < 0.40f)
+                    {
+                        Color blended = (GetColorFromGene(fColor) + GetColorFromGene(mColor)) / 2f;
+                        AddGeneAsInheritable(child, FindClosestColorGene(blended));
+                    }
+                    else AddGeneAsInheritable(child, rand < 0.70f ? fColor : mColor);
+                }
+                else if (fColor != null || mColor != null)
+                {
+                    AddGeneAsInheritable(child, fColor ?? mColor);
+                }
+            }
+
+            // --- 2. НАСЛЕДОВАНИЕ ТИПА ---
+            if (!HasTypeGene(child))
+            {
+                GeneDef fType = GetActiveKaguneTypeGene(father);
+                GeneDef mType = GetActiveKaguneTypeGene(mother);
+
+                if (fType != null && mType != null)
+                {
+                    if (fType != mType)
+                    {
+                        if (Rand.Value < 0.15f) // Шанс на Химеру
+                        {
+                            AddGeneAsInheritable(child, fType);
+                            AddGeneAsInheritable(child, mType);
+
+                            // ГЛАВНОЕ ИЗМЕНЕНИЕ: Устанавливаем имя ксенотипа
+                            child.genes.xenotypeName = "TG_ChimeraXenotypeLabel".Translate();
+
+                            Messages.Message("TG_ChimeraBorn".Translate(child.LabelShort), child, MessageTypeDefOf.PositiveEvent);
+                        }
+                        else
+                        {
+                            AddGeneAsInheritable(child, Rand.Value < 0.5f ? fType : mType);
+                        }
+                    }
+                    else
+                    {
+                        AddGeneAsInheritable(child, fType);
+                    }
+                }
+            }
+        }
+
+        private static void AssignRandomTraits(Pawn pawn)
+        {
+            // Даем случайный цвет
+            if (!HasColorGene(pawn))
+                AddGeneAsInheritable(pawn, GetRandomColorGene());
+
+            // Даем случайный тип (для рейдеров/стартовых)
+            if (!HasTypeGene(pawn))
+            {
+                string[] types = { "Ukaku", "Koukaku", "Rinkaku", "Bikaku" };
+                GeneDef randomType = DefDatabase<GeneDef>.GetNamed("Gene_" + types.RandomElement(), false);
+                if (randomType != null) AddGeneAsInheritable(pawn, randomType);
+            }
+        }
+
+        private static void AddGeneAsInheritable(Pawn pawn, GeneDef geneDef)
+        {
+            if (geneDef == null || pawn.genes.HasActiveGene(geneDef)) return;
+            pawn.genes.AddGene(geneDef, xenogene: false);
+        }
+
+        private static bool HasColorGene(Pawn p) => p.genes.GenesListForReading.Any(g => g.def.exclusionTags != null && g.def.exclusionTags.Contains("KaguneColor"));
+
+        // ВАЖНО: Проверяем наличие любого из 4 генов типа
+        private static bool HasTypeGene(Pawn p)
+        {
+            string[] types = { "Gene_Ukaku", "Gene_Koukaku", "Gene_Rinkaku", "Gene_Bikaku" };
+            return p.genes.GenesListForReading.Any(g => types.Contains(g.def.defName));
+        }
+
+        private static GeneDef GetRandomColorGene() => DefDatabase<GeneDef>.AllDefs.Where(g => g.exclusionTags != null && g.exclusionTags.Contains("KaguneColor")).RandomElement();
+
+        private static GeneDef GetActiveKaguneColorGene(Pawn p) => p?.genes?.GenesListForReading.FirstOrDefault(g => g.Active && g.def.exclusionTags != null && g.def.exclusionTags.Contains("KaguneColor"))?.def;
+
+        private static GeneDef GetActiveKaguneTypeGene(Pawn p)
+        {
+            string[] types = { "Gene_Ukaku", "Gene_Koukaku", "Gene_Rinkaku", "Gene_Bikaku" };
+            return p?.genes?.GenesListForReading.FirstOrDefault(g => g.Active && types.Contains(g.def.defName))?.def;
+        }
+
+        private static Color GetColorFromGene(GeneDef gene) => gene.renderNodeProperties?.FirstOrDefault()?.color ?? Color.red;
+
+        private static GeneDef FindClosestColorGene(Color target)
+        {
+            GeneDef closest = null;
+            float minDistance = float.MaxValue;
+            var colorGenes = DefDatabase<GeneDef>.AllDefs.Where(g => g.exclusionTags != null && g.exclusionTags.Contains("KaguneColor"));
+            foreach (var g in colorGenes)
+            {
+                Color c = GetColorFromGene(g);
+                float distance = Mathf.Sqrt(Mathf.Pow(c.r - target.r, 2) + Mathf.Pow(c.g - target.g, 2) + Mathf.Pow(c.b - target.b, 2));
+                if (distance < minDistance) { minDistance = distance; closest = g; }
+            }
+            return closest ?? colorGenes.First();
+        }
+    }
+}
+
 /ClassLibrary1/Gene_RCCells.cs
 ========================================
 ﻿using System;
@@ -254,6 +377,7 @@ namespace TokyoGhoulMod
 {
     public class Gene_RCCells : Gene_Resource
     {
+        // Базовые параметры расхода
         private const float DaysToStarve = 15f;
         private const float PassiveDrainPerDay = 1f / DaysToStarve;
         private const float KaguneDrainMultiplier = 15f;
@@ -280,24 +404,16 @@ namespace TokyoGhoulMod
         {
             cannibalismCount += nutrition;
             Value += nutrition * 0.8f;
-
             if (cannibalismCount > 20f && pawn.IsHashIntervalTick(2500))
-            {
                 Messages.Message("TG_KakujaStirring".Translate(pawn.LabelShort), pawn, MessageTypeDefOf.CautionInput);
-            }
         }
 
         public override IEnumerable<Gizmo> GetGizmos()
         {
             foreach (Gizmo gizmo in base.GetGizmos())
-            {
                 if (!(gizmo is GeneGizmo_Resource)) yield return gizmo;
-            }
             if (pawn.IsColonistPlayerControlled)
-            {
-                // Исправленный вызов Гизмо
                 yield return new GeneGizmo_RCCells(this, null, BarColor, BarHighlightColor);
-            }
         }
 
         public override void Tick()
@@ -305,59 +421,53 @@ namespace TokyoGhoulMod
             base.Tick();
             if (!pawn.Spawned || pawn.Dead) return;
 
-            bool active = IsKaguneActive();
+            // Считаем количество активных боевых форм кагуне
+            int activeKaguneCount = CountActiveKagunes();
+            bool anyActive = activeKaguneCount > 0;
 
             if (pawn.IsHashIntervalTick(100))
             {
-                ManageKakugan(active);
+                ManageKakugan(anyActive);
 
                 float currentMultiplier = PassiveDrainPerDay;
-                if (active)
+                if (anyActive)
                 {
                     bool isUkaku = pawn.health.hediffSet.HasHediff(DefDatabase<HediffDef>.GetNamed("Hediff_Ukaku", false));
-                    currentMultiplier *= isUkaku ? UkakuDrainMultiplier : KaguneDrainMultiplier;
+                    float baseActiveDrain = isUkaku ? UkakuDrainMultiplier : KaguneDrainMultiplier;
+
+                    // БАЛАНС ХИМЕРЫ: Каждое дополнительное кагуне увеличивает расход на 70%
+                    currentMultiplier *= baseActiveDrain * (1f + (activeKaguneCount - 1) * 0.7f);
                 }
 
                 Value -= (currentMultiplier / 60000f) * 100f;
-
-                UpdateStatusEffects(active);
+                UpdateStatusEffects(anyActive);
                 UpdateRCStarvationHediff();
             }
 
-            if (pawn.needs.food != null && !active)
-            {
+            if (pawn.needs.food != null && !anyActive)
                 pawn.needs.food.CurLevel += pawn.needs.food.FoodFallPerTick * 0.95f;
-            }
         }
 
-        private bool IsKaguneActive()
+        private int CountActiveKagunes()
         {
-            if (pawn.health?.hediffSet?.hediffs == null) return false;
-            return pawn.health.hediffSet.hediffs.Any(h =>
-                h.def.defName == "Hediff_Ukaku" ||
-                h.def.defName == "Hediff_Koukaku" ||
-                h.def.defName == "Hediff_Rinkaku" ||
-                h.def.defName == "Hediff_Bikaku");
+            string[] tags = { "Hediff_Ukaku", "Hediff_Koukaku", "Hediff_Rinkaku", "Hediff_Bikaku" };
+            return pawn.health.hediffSet.hediffs.Count(h => tags.Contains(h.def.defName));
         }
+
+        // Остальные методы (UpdateRCStarvationHediff, ApplyStarvationDamage, ManageKakugan) остаются без изменений
+        // ... (пропускаю для краткости, они должны быть в коде)
 
         private void UpdateRCStarvationHediff()
         {
             HediffDef starvationDef = DefDatabase<HediffDef>.GetNamed("RCStarvation", false);
             if (starvationDef == null) return;
-
             Hediff existing = pawn.health.hediffSet.GetFirstHediffOfDef(starvationDef);
-
             if (Value < ThresholdHungerLight)
             {
                 if (existing == null) existing = pawn.health.AddHediff(starvationDef);
                 existing.Severity = 1.0f - (Value / ThresholdHungerLight);
-
-                if (Value < ThresholdHungerCritical && !pawn.InMentalState && !pawn.Downed)
-                {
-                    if (Rand.Value < 0.05f)
-                        pawn.mindState.mentalStateHandler.TryStartMentalState(MentalStateDefOf.Berserk, "TG_GhoulHungerReason".Translate(), true);
-                }
-
+                if (Value < ThresholdHungerCritical && !pawn.InMentalState && !pawn.Downed && Rand.Value < 0.05f)
+                    pawn.mindState.mentalStateHandler.TryStartMentalState(MentalStateDefOf.Berserk, "TG_GhoulHungerReason".Translate(), true);
                 if (Value <= 0.001f && existing.Severity >= 0.95f) ApplyStarvationDamage();
             }
             else if (existing != null)
@@ -369,18 +479,9 @@ namespace TokyoGhoulMod
 
         private void ApplyStarvationDamage()
         {
-            if (pawn.jobs?.curJob != null)
-            {
-                JobDef curJobDef = pawn.jobs.curJob.def;
-                if (curJobDef == JobDefOf.LayDown || curJobDef == JobDefOf.Wait_MaintainPosture)
-                {
-                    pawn.jobs.EndCurrentJob(JobCondition.InterruptForced);
-                }
-            }
-
-            DamageInfo dinfo = new DamageInfo(DamageDefOf.Stab, 1.2f, 0, -1, null, pawn.RaceProps.body.corePart);
-            pawn.TakeDamage(dinfo);
-
+            if (pawn.jobs?.curJob != null && (pawn.jobs.curJob.def == JobDefOf.LayDown || pawn.jobs.curJob.def == JobDefOf.Wait_MaintainPosture))
+                pawn.jobs.EndCurrentJob(JobCondition.InterruptForced);
+            pawn.TakeDamage(new DamageInfo(DamageDefOf.Stab, 1.2f, 0, -1, null, pawn.RaceProps.body.corePart));
             if (pawn.IsHashIntervalTick(1000))
                 Messages.Message("TG_GhoulStarvingToDeath".Translate(pawn.LabelShort), pawn, MessageTypeDefOf.NegativeHealthEvent);
         }
@@ -389,11 +490,8 @@ namespace TokyoGhoulMod
         {
             if (Value <= 0 && isKaguneActive)
             {
-                string[] tags = { "Ukaku", "Koukaku", "Rinkaku", "Bikaku" };
-                var toRemove = pawn.health.hediffSet.hediffs
-                    .Where(h => tags.Any(tag => h.def.defName == "Hediff_" + tag))
-                    .ToList();
-
+                string[] tags = { "Hediff_Ukaku", "Hediff_Koukaku", "Hediff_Rinkaku", "Hediff_Bikaku" };
+                var toRemove = pawn.health.hediffSet.hediffs.Where(h => tags.Contains(h.def.defName)).ToList();
                 foreach (var h in toRemove) pawn.health.RemoveHediff(h);
                 Messages.Message("TokyoGhoul_KaguneRetractedCells".Translate(pawn.LabelShort), pawn, MessageTypeDefOf.NegativeEvent);
                 pawn.Drawer.renderer.SetAllGraphicsDirty();
@@ -404,19 +502,15 @@ namespace TokyoGhoulMod
         {
             HediffDef kakuganDef = DefDatabase<HediffDef>.GetNamed("Kakugan", false);
             if (kakuganDef == null) return;
-
             bool currentlyHas = pawn.health.hediffSet.HasHediff(kakuganDef);
             bool shouldHave = isKaguneActive || pawn.InMentalState;
-
             if (shouldHave && !currentlyHas)
             {
-                var eyes = pawn.RaceProps.body.AllParts.Where(p => p.def == BodyPartDefOf.Eye);
+                var eyes = pawn.health.hediffSet.GetNotMissingParts().Where(p => p.def == BodyPartDefOf.Eye);
                 foreach (var part in eyes) pawn.health.AddHediff(kakuganDef, part);
             }
             else if (!shouldHave && currentlyHas)
-            {
                 pawn.health.hediffSet.hediffs.RemoveAll(x => x.def == kakuganDef);
-            }
         }
 
         public override void PostAdd()
@@ -424,37 +518,22 @@ namespace TokyoGhoulMod
             base.PostAdd();
             Value = 0.5f;
 
-            // Логика какухо при инициализации
-            bool alreadyHasKakuho = pawn.health.hediffSet.hediffs.Any(h => h.def.defName.Contains("Kakuho"));
-            if (pawn.genes == null) return;
+            // 1. ЗАПУСК ГЕНЕТИКИ (Наследование или рандом)
+            GeneticsHelper.InitializeGhoulishTraits(pawn);
 
-            bool hasKaguneGene = pawn.genes.GenesListForReading.Any(g =>
-                g.def.exclusionTags != null && g.def.exclusionTags.Contains("KaguneType"));
-
-            if (!hasKaguneGene)
+            // 2. ВЫДАЧА ВСЕХ ОРГАНОВ КАКОХО ДЛЯ ХИМЕР
+            string[] types = { "Ukaku", "Koukaku", "Rinkaku", "Bikaku" };
+            foreach (var type in types)
             {
-                string[] types = { "Ukaku", "Koukaku", "Rinkaku", "Bikaku" };
-                string chosenType = types.RandomElement();
-
-                GeneDef geneDef = DefDatabase<GeneDef>.GetNamed("Gene_" + chosenType, false);
-                HediffDef kakuhoDef = DefDatabase<HediffDef>.GetNamed("Hediff_Kakuho" + chosenType, false);
-
-                if (geneDef != null)
+                GeneDef typeGene = DefDatabase<GeneDef>.GetNamed("Gene_" + type, false);
+                if (pawn.genes.HasActiveGene(typeGene))
                 {
-                    pawn.genes.AddGene(geneDef, true);
-                    if (geneDef.abilities != null)
-                    {
-                        foreach (AbilityDef ab in geneDef.abilities)
-                        {
-                            if (!pawn.abilities.abilities.Any(a => a.def == ab))
-                                pawn.abilities.GainAbility(ab);
-                        }
-                    }
-                    if (!alreadyHasKakuho && kakuhoDef != null)
+                    HediffDef kakuhoDef = DefDatabase<HediffDef>.GetNamed("Hediff_Kakuho" + type, false);
+                    // Добавляем орган, если его еще нет
+                    if (kakuhoDef != null && !pawn.health.hediffSet.HasHediff(kakuhoDef))
                     {
                         pawn.health.AddHediff(kakuhoDef, pawn.RaceProps.body.corePart);
                     }
-                    Messages.Message("TG_KaguneTypeAwakened".Translate(pawn.LabelShort, geneDef.label), pawn, MessageTypeDefOf.PositiveEvent);
                 }
             }
         }
@@ -513,8 +592,8 @@ namespace TokyoGhoulMod
     <ProjectGuid>{5958758E-12CB-48C2-9319-CAEC7E2B7DB5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ClassLibrary1</RootNamespace>
-    <AssemblyName>ClassLibrary1</AssemblyName>
+    <RootNamespace>TokyoGhoulMod</RootNamespace>
+    <AssemblyName>TokyoGhoulMod</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -528,19 +607,12 @@ namespace TokyoGhoulMod
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
   <ItemGroup>
     <Compile Include="Ability_ToggleKagune.cs" />
     <Compile Include="Ability_UkakuFire.cs" />
     <Compile Include="Alert_RCStarvation.cs" />
     <Compile Include="GeneGizmo_RCCells.cs" />
+    <Compile Include="GeneticsHelper.cs" />
     <Compile Include="Gene_RCCells.cs" />
     <Compile Include="GhoulDefOf.cs" />
     <Compile Include="IsGhoul.cs" />
@@ -548,6 +620,7 @@ namespace TokyoGhoulMod
     <Compile Include="Patch_ButcherGhoul.cs" />
     <Compile Include="PawnRenderNode_Kagune.cs" />
     <Compile Include="Patch_Ingested.cs" />
+    <Compile Include="PawnRenderNode_Single.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Recipe_KakuhoSurgery.cs" />
     <Compile Include="ThoughtWorker_RCStarvation.cs" />
@@ -561,384 +634,17 @@ namespace TokyoGhoulMod
       <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="com.rlabrecque.steamworks.net, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\com.rlabrecque.steamworks.net.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="HarmonyMod">
-      <HintPath>..\..\..\HarmonyMod\Current\Assemblies\HarmonyMod.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="ISharpZipLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\ISharpZipLib.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Mono.Security">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\Mono.Security.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="NAudio">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\NAudio.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="NVorbis">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\NVorbis.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.EnterpriseServices" />
-    <Reference Include="System.IO.Compression.FileSystem" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ServiceModel.Internals, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\System.ServiceModel.Internals.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="Unity.AI.Navigation">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\Unity.AI.Navigation.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.Burst">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\Unity.Burst.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.Burst.Unsafe">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\Unity.Burst.Unsafe.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.Collections">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\Unity.Collections.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.Collections.LowLevel.ILSupport">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\Unity.Collections.LowLevel.ILSupport.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.Mathematics">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\Unity.Mathematics.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.MemoryProfiler">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\Unity.MemoryProfiler.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.Profiling.Core">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\Unity.Profiling.Core.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.TextMeshPro">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\Unity.TextMeshPro.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.AccessibilityModule">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.AccessibilityModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.AIModule">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.AIModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.AndroidJNIModule">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.AndroidJNIModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.AnimationModule">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.ARModule">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.ARModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.AssetBundleModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.AudioModule">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.AudioModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.ClothModule">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.ClothModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.ClusterInputModule">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.ClusterInputModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.ClusterRendererModule">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.ClusterRendererModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.ContentLoadModule">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.ContentLoadModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEngine.CrashReportingModule">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.CrashReportingModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.DirectorModule">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.DirectorModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.DSPGraphModule">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.DSPGraphModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.GameCenterModule">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.GameCenterModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.GIModule">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.GIModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.GridModule">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.GridModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.HotReloadModule">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.HotReloadModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.ImageConversionModule">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.IMGUIModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.InputLegacyModule">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.InputModule">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.InputModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.JSONSerializeModule">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.JSONSerializeModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.LocalizationModule">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.LocalizationModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.NVIDIAModule">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.NVIDIAModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.ParticleSystemModule">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.ParticleSystemModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.PerformanceReportingModule">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.PerformanceReportingModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.Physics2DModule">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.Physics2DModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.PhysicsModule">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.ProfilerModule">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.ProfilerModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.PropertiesModule">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.PropertiesModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.RuntimeInitializeOnLoadManagerInitializerModule">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.RuntimeInitializeOnLoadManagerInitializerModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.ScreenCaptureModule">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.ScreenCaptureModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.SharedInternalsModule">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.SharedInternalsModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.SpriteMaskModule">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.SpriteMaskModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.SpriteShapeModule">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.SpriteShapeModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.StreamingModule">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.StreamingModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.SubstanceModule">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.SubstanceModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.SubsystemsModule">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.SubsystemsModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.TerrainModule">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.TerrainModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.TerrainPhysicsModule">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.TerrainPhysicsModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.TextCoreFontEngineModule">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.TextCoreFontEngineModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.TextCoreTextEngineModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.TextCoreTextEngineModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.TilemapModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.TilemapModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.TLSModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.TLSModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.UI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.UIElementsModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.UIElementsModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.UIModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.UIModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.UmbraModule">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.UmbraModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.UnityAnalyticsModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.UnityAnalyticsModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.UnityConnectModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.UnityConnectModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.UnityCurlModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.UnityCurlModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.UnityTestProtocolModule">
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.UnityTestProtocolModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.UnityWebRequestAssetBundleModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.UnityWebRequestAssetBundleModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.UnityWebRequestAudioModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.UnityWebRequestAudioModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.UnityWebRequestModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.UnityWebRequestModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.UnityWebRequestTextureModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.UnityWebRequestTextureModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.UnityWebRequestWWWModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.VehiclesModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.VehiclesModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.VFXModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.VFXModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.VideoModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.VideoModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.VirtualTexturingModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.VirtualTexturingModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.VRModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.VRModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.WindModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.WindModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.XRModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Games\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.XRModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
@@ -966,13 +672,9 @@ namespace TokyoGhoulMod
     {
         static TokyoGhoul_PostInit()
         {
-            // Создаем экземпляр Harmony с уникальным ID
             var harmony = new Harmony("kirinyamaga.tokyoghoul");
-
-            // Выполняем патчи
-            harmony.PatchAll(Assembly.GetExecutingAssembly());
-
-            Log.Message("[Tokyo Ghoul] Harmony patches applied successfully.");
+            harmony.PatchAll();
+            Log.Message("[Tokyo Ghoul] Мод успешно инициализирован.");
         }
     }
 }
@@ -1166,10 +868,10 @@ using System.Linq;
 
 namespace TokyoGhoulMod
 {
-    // 1. Свойства: Добавляем поле kaguneTag для использования в XML
     public class PawnRenderNodeProperties_Kagune : PawnRenderNodeProperties
     {
-        public string kaguneTag; // Ukaku, Koukaku, Rinkaku, Bikaku
+        public string kaguneTag;
+        public float baseScale = 1f;
 
         public PawnRenderNodeProperties_Kagune()
         {
@@ -1178,35 +880,110 @@ namespace TokyoGhoulMod
         }
     }
 
-    // 2. Worker: Логика отрисовки
     public class PawnRenderNodeWorker_Kagune : PawnRenderNodeWorker
     {
         public override bool CanDrawNow(PawnRenderNode node, PawnDrawParms parms)
         {
             if (!base.CanDrawNow(node, parms)) return false;
-
             Pawn pawn = node.tree?.pawn;
             if (pawn?.health?.hediffSet == null) return false;
 
-            // ИСПРАВЛЕНИЕ: Используем Props с большой буквы
             var kaguneProps = node.Props as PawnRenderNodeProperties_Kagune;
+            if (kaguneProps == null || string.IsNullOrEmpty(kaguneProps.kaguneTag)) return false;
 
-            if (kaguneProps == null || string.IsNullOrEmpty(kaguneProps.kaguneTag))
-                return false;
-
-            // Ищем хедифф: Hediff_ + тег (например, Hediff_Ukaku)
             string requiredHediffName = "Hediff_" + kaguneProps.kaguneTag;
-
-            // Проверяем наличие хедиффа в списке
             return pawn.health.hediffSet.hediffs.Any(x => x.def.defName == requiredHediffName);
+        }
+
+        public override Vector3 ScaleFor(PawnRenderNode node, PawnDrawParms parms)
+        {
+            Vector3 result = base.ScaleFor(node, parms);
+            if (node.Props is PawnRenderNodeProperties_Kagune props) result *= props.baseScale;
+            return result;
         }
     }
 
-    // 3. Узел
     public class PawnRenderNode_Kagune : PawnRenderNode
     {
         public PawnRenderNode_Kagune(Pawn pawn, PawnRenderNodeProperties props, PawnRenderTree tree)
             : base(pawn, props, tree) { }
+
+        public override Color ColorFor(Pawn pawn)
+        {
+            if (pawn.genes != null)
+            {
+                // ИСПРАВЛЕНО: Проверяем g.Active, чтобы учитывать систему доминирования генов
+                Gene colorGene = pawn.genes.GenesListForReading.FirstOrDefault(g =>
+                    g.Active &&
+                    g.def.exclusionTags != null &&
+                    g.def.exclusionTags.Contains("KaguneColor"));
+
+                if (colorGene != null && colorGene.def.renderNodeProperties != null)
+                {
+                    var colorProp = colorGene.def.renderNodeProperties.FirstOrDefault();
+                    if (colorProp != null && colorProp.color.HasValue)
+                    {
+                        return colorProp.color.Value;
+                    }
+                }
+            }
+            return new Color(0.8f, 0.1f, 0.1f); // Дефолтный красный
+        }
+    }
+}
+
+/ClassLibrary1/PawnRenderNode_Single.cs
+========================================
+﻿using Verse;
+using RimWorld;
+using UnityEngine;
+
+namespace TokyoGhoulMod
+{
+    // Свойства
+    public class PawnRenderNodeProperties_Single : PawnRenderNodeProperties
+    {
+        public float baseScale = 1f; // Поле для XML
+
+        public PawnRenderNodeProperties_Single()
+        {
+            nodeClass = typeof(PawnRenderNode_Single);
+            workerClass = typeof(PawnRenderNodeWorker_Single);
+        }
+    }
+
+    // Воркер
+    public class PawnRenderNodeWorker_Single : PawnRenderNodeWorker_Eye
+    {
+        public override Vector3 ScaleFor(PawnRenderNode node, PawnDrawParms parms)
+        {
+            // Возвращаем стандартный масштаб глаз (воркер глаза сам делает их маленькими)
+            return base.ScaleFor(node, parms);
+        }
+    }
+
+    // Узел
+    public class PawnRenderNode_Single : PawnRenderNode
+    {
+        public PawnRenderNode_Single(Pawn pawn, PawnRenderNodeProperties props, PawnRenderTree tree)
+            : base(pawn, props, tree) { }
+
+        public override Graphic GraphicFor(Pawn pawn)
+        {
+            string text = TexPathFor(pawn);
+            if (text.NullOrEmpty()) return null;
+
+            float scale = 1f;
+            // ПРОВЕРКА: Пытаемся достать масштаб из свойств
+            if (props is PawnRenderNodeProperties_Single customProps)
+            {
+                scale = customProps.baseScale;
+            }
+
+            // Устанавливаем размер графики (drawSize) на основе нашего масштаба
+            // Именно это значение физически уменьшит текстуру внутри игры
+            return GraphicDatabase.Get<Graphic_Single>(text, ShaderFor(pawn), new Vector2(scale, scale), ColorFor(pawn));
+        }
     }
 }
 

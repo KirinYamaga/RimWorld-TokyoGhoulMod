@@ -50,6 +50,20 @@ namespace TokyoGhoulMod
             {
                 ApplyGhoulishRejection(ingester, nutrition);
             }
+
+            Hediff_Pregnant pregnant = (Hediff_Pregnant)ingester.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.PregnantHuman);
+            if (pregnant != null)
+            {
+                // Если это человек, вынашивающий гуля (гибридная беременность)
+                // В TG человек должен есть человечину, чтобы накормить плод гуля.
+                if (!ingester.genes.HasActiveGene(DefDatabase<GeneDef>.GetNamed("Gene_RCCells")))
+                {
+                    if (IsHumanlikeMeat(__instance))
+                    {
+                        // Мать съела мясо - плод доволен (можно добавить скрытый бафф)
+                    }
+                }
+            }
         }
 
         private static bool IsGhoulMatter(Thing food)

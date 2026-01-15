@@ -143,17 +143,17 @@
   <!-- Базовый шаблон для генов кагуне -->
   <GeneDef Name="KaguneTypeBase" Abstract="True">
     <displayCategory>TG_Kagune</displayCategory>
-    <exclusionTags>
-    </exclusionTags>
+    <!-- Мы убрали exclusionTags, чтобы наш C# мог добавлять 2 гена (Химера) одному ребенку -->
     <biostatCpx>3</biostatCpx>
-    <biostatMet>-2</biostatMet>
+    <biostatMet>0</biostatMet> <!-- Поставили 0, чтобы не блокировать размножение -->
     <displayOrderInCategory>200</displayOrderInCategory>
   </GeneDef>
 
   <!-- УКАКУ -->
-    <GeneDef ParentName="KaguneTypeBase">
+  <GeneDef ParentName="KaguneTypeBase">
     <defName>Gene_Ukaku</defName>
     <label>Укаку</label>
+    <description>Крылоподобное кагуне, специализирующееся на скорости и дальнем бое.</description>
     <abilities>
       <li>Release_Ukaku</li>
       <li>Ukaku_Fire</li>
@@ -178,6 +178,7 @@
   <GeneDef ParentName="KaguneTypeBase">
     <defName>Gene_Rinkaku</defName>
     <label>Ринкаку</label>
+    <description>Чешуйчатые щупальца с огромной силой удара и регенерацией.</description>
     <abilities><li>Release_Rinkaku</li></abilities>
     <renderNodeProperties>
       <li Class="TokyoGhoulMod.PawnRenderNodeProperties_Kagune">
@@ -196,9 +197,10 @@
   </GeneDef>
 
   <!-- КОКАКУ -->
-<GeneDef ParentName="KaguneTypeBase">
+  <GeneDef ParentName="KaguneTypeBase">
     <defName>Gene_Koukaku</defName>
     <label>Кокаку</label>
+    <description>Тяжелое бронированное кагуне, обеспечивающее отличную защиту.</description>
     <abilities><li>Release_Koukaku</li></abilities>
     <renderNodeProperties>
       <li Class="TokyoGhoulMod.PawnRenderNodeProperties_Kagune">
@@ -216,10 +218,11 @@
     </renderNodeProperties>
   </GeneDef>
 
-  <!-- БИКАКУ (Исправлен слой и тег) -->
+  <!-- БИКАКУ -->
   <GeneDef ParentName="KaguneTypeBase">
     <defName>Gene_Bikaku</defName>
     <label>Бикаку</label>
+    <description>Хвостатое кагуне, идеально сбалансированное для любых ситуаций.</description>
     <abilities><li>Release_Bikaku</li></abilities>
     <renderNodeProperties>
       <li Class="TokyoGhoulMod.PawnRenderNodeProperties_Kagune">
@@ -335,8 +338,8 @@
     <resourceGizmoThresholds>
       <li>0.2</li><li>0.5</li><li>0.8</li>
     </resourceGizmoThresholds>
-    <biostatMet>2</biostatMet> 
-    <biostatCpx>3</biostatCpx>
+    <biostatMet>8</biostatMet> 
+    <biostatCpx>5</biostatCpx>
     <displayOrderInCategory>100</displayOrderInCategory>
     <statFactors>
       <HungerRateFactor>0.1</HungerRateFactor> <!-- ИСПРАВЛЕНО НАЗВАНИЕ -->
@@ -883,8 +886,9 @@
 	<XenotypeDef>
 		<defName>TG_Ghoul</defName>
 		<label>Гуль</label>
-		<description>Сверхчеловек-хищник.</description>
+		<description>Сверхчеловек-хищник. Все способности гуля заложены на генетическом уровне и передаются потомству.</description>
 		<iconPath>UI/Icons/Xenotypes/Sanguophage</iconPath>
+		<inheritable>true</inheritable>
 		<genes>
 			<li>Gene_RCCells</li>
 			
@@ -933,5 +937,7 @@
   <TG_HumanAteGhoulMeat>{0} съел мясо гуля! В его крови начался RC-коллапс.</TG_HumanAteGhoulMeat>
   <TG_KakujaStirring>Внутри {0} что-то меняется... Его какухо пульсирует от поглощенной силы других гулей.</TG_KakujaStirring>
   <TG_ChimeraBorn>Невероятно! {0} родился Химерой, унаследовав типы кагуне обоих родителей.</TG_ChimeraBorn>
+  <TG_MissingSpecificKakuho>Отсутствует орган какухо типа {0}</TG_MissingSpecificKakuho>
+  <TG_ChimeraXenotypeLabel>Химера</TG_ChimeraXenotypeLabel>
 </LanguageData>
 
